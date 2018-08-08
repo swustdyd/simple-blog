@@ -62,31 +62,26 @@ export default class Side extends React.Component{
             config
         })
         /** 直接操作dom实现动画 */
-        if(this.refs[item.key]){
-            console.log(this.refs[item.key].className);
-            if(this.refs[item.key].clientHeight === 0){           
-                this.setState({
-                    config
-                })
-                setTimeout(() => {                    
-                    const height = this.refs[item.key].clientHeight; 
-                    console.log(height)
-                    this.refs[item.key].style.height = '0px';
-                    setTimeout(() => {
-                        console.log(this.refs[item.key].clientHeight)
-                        this.refs[item.key].style.height = height + 'px';
-                    }, 0)  
-                }, 0);
-            }else{
-                this.refs[item.key].style.height = this.refs[item.key].clientHeight + 'px';
-                setTimeout(() => {
-                    this.refs[item.key].style.height = '';                    
-                    this.setState({
-                        config
-                    })
-                }, 0);
-            }
-        }
+        // if(this.refs[item.key]){
+        //     console.log(this.refs[item.key].className);
+        //     if(this.refs[item.key].clientHeight === 0){       
+        //         this.refs[item.key].className = 'item-nodes item-nodes-show';                
+        //         this.refs[item.key].style.height = '0px';
+        //         setTimeout(() => {                    
+        //             const height = this.refs[item.key].clientHeight;
+        //             this.refs[item.key].style.height = height + 'px';
+        //             setTimeout(() => {
+        //                 this.refs[item.key].style.height = '';
+        //             }, 0)  
+        //         }, 0);
+        //     }else{  
+        //         this.refs[item.key].style.height = '0px';                
+        //         setTimeout(() => {
+        //             this.refs[item.key].className = 'item-nodes';
+        //             this.refs[item.key].style.height = '';
+        //         }, 300) 
+        //     }
+        // }
     }
 
     getIndent(indent){
@@ -109,7 +104,7 @@ export default class Side extends React.Component{
             let itemNodesClass = '',
                 itemIconClass = 'item-icon';
             if(hasNodes && !item.expand){
-                // itemNodesClass += ' item-nodes-hidden';
+                itemNodesClass += ' item-nodes-hidden';
                 itemIconClass += ' item-icon-right'
             }else if(hasNodes && item.expand){
                 itemIconClass += ' item-icon-down'

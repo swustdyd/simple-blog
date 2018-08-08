@@ -52,8 +52,7 @@ $duration: 0.3s;
 .item-nodes{
     overflow: hidden;
     transition: height $duration;
-    display: none;
 }
-.item-nodes-show{
-    display: block;
+.item-nodes-hidden{
+    display: none;
 }
