@@ -1,0 +1,59 @@
+.side-container{
+    padding: 5px 0;
+    background-color: aliceblue;
+    border-radius: 5px;
+}
+// .item-container{
+//     margin: 5px 0; 
+// }
+$textHeight: 22px;
+$textPadding: 5px;
+$duration: 0.3s;
+.item-text-container{
+    padding: $textPadding;
+    border-radius: 5px;
+    height: $textHeight;
+    line-height: $textHeight;
+}
+.item-text-container:hover{
+    cursor: pointer;
+    color: #61dafb;
+    background-color: #20232a;
+}
+.item-text-container span{
+    display: inline-block;
+    vertical-align: middle;
+}
+.item-text-indent{
+    display: inline-block;
+    width: 1em;
+}
+.item-icon{
+    width: $textHeight;
+    height: $textHeight;
+    background-size: 100%;
+    transition: transform $duration;
+}
+.item-text-container:hover .item-icon-right{
+    background-image: url(../../images/arrow-right-61dafb.png);
+}
+
+.item-text-container:hover .item-icon-down{    
+    background-image: url(../../images/arrow-right-61dafb.png);
+    transform: rotate(90deg);
+}
+.item-icon-right{
+    background-image: url(../../images/arrow-right.png);
+}
+.item-icon-down{
+    background-image: url(../../images/arrow-right.png);
+    transform: rotate(90deg);
+}
+.item-nodes{
+    overflow: hidden;
+    transition: height $duration;
+    display: none;
+}
+.item-nodes-show{
+    display: block;
+}
