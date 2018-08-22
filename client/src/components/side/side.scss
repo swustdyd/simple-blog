@@ -1,3 +1,5 @@
+@import '../../theme/_variable.scss';
+
 .side-container{
     padding: 5px 0;
     background-color: aliceblue;
@@ -17,8 +19,11 @@ $duration: 0.3s;
 }
 .item-text-container:hover{
     cursor: pointer;
-    color: #61dafb;
+    color: $textHoverColor;
     background-color: #20232a;
+    *{
+        color: $textHoverColor;
+    }
 }
 .item-text-container span{
     display: inline-block;

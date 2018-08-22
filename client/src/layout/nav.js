@@ -23,7 +23,7 @@ class Nav extends React.Component {
         const {withRouter} = this.props;
         return config.map((item) => {
             return (
-                <Menu.Item itemKey={withRouter ? item.path : item.key}>
+                <Menu.Item itemKey={item.key}>
                     <Link to={item.path}>{item.text}</Link>
                 </Menu.Item>
             )
@@ -31,7 +31,7 @@ class Nav extends React.Component {
     }
     render() {        
         const {config, withRouter, location} = this.props;
-        const defaultItemKey = withRouter ? location.pathname : config[0].key;
+        const defaultItemKey = withRouter ? Tool.getHashPath(0) : config[0].key;
         return (
             <div className="nav">
                 <span className="logo">

@@ -8,7 +8,7 @@ class Footer extends React.Component{
     render(){
         return(
             <div className="footer-content">
-                Blog Admin ©{moment(Date.now()).format('YYYY')} Created by DYD
+                Blog Admin ©{moment(Date.now()).format('YYYY')} Created by DYDd
             </div>
         );
     }

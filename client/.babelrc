@@ -4,6 +4,7 @@
         "react"
     ],
     "plugins": [
-        "dynamic-import-webpack"
+        "dynamic-import-webpack",
+        ["import", { "libraryName": "antd", "libraryDirectory": "es", "style": "css" }]
     ]
 }

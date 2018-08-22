@@ -3,39 +3,10 @@ import React from 'react'
 import './side.scss'
 
 export default class Side extends React.Component{
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {
-            config: [
-                {
-                    key: 'articelManage',
-                    text: '文章管理',
-                    nodes: [
-                        {
-                            key: 'articleList',
-                            text: '文章列表'
-                        },
-                        {
-                            key: 'articleAdd',
-                            text: '新增文章'
-                        }
-                    ]
-                },
-                {
-                    key: 'userManage',
-                    text: '用户管理',
-                    nodes: [
-                        {
-                            key: 'userList',
-                            text: '用户列表'
-                        },
-                        {
-                            key: 'userAdd',
-                            text: '新增用户'
-                        }
-                    ]
-                }
-            ]
+            config: props.config
         }
     }
 
@@ -61,27 +32,6 @@ export default class Side extends React.Component{
         this.setState({
             config
         })
-        /** 直接操作dom实现动画 */
-        // if(this.refs[item.key]){
-        //     console.log(this.refs[item.key].className);
-        //     if(this.refs[item.key].clientHeight === 0){       
-        //         this.refs[item.key].className = 'item-nodes item-nodes-show';                
-        //         this.refs[item.key].style.height = '0px';
-        //         setTimeout(() => {                    
-        //             const height = this.refs[item.key].clientHeight;
-        //             this.refs[item.key].style.height = height + 'px';
-        //             setTimeout(() => {
-        //                 this.refs[item.key].style.height = '';
-        //             }, 0)  
-        //         }, 0);
-        //     }else{  
-        //         this.refs[item.key].style.height = '0px';                
-        //         setTimeout(() => {
-        //             this.refs[item.key].className = 'item-nodes';
-        //             this.refs[item.key].style.height = '';
-        //         }, 300) 
-        //     }
-        // }
     }
 
     getIndent(indent){
@@ -95,7 +45,7 @@ export default class Side extends React.Component{
     renderSide(config = [], indent = 0){
         return config.map((item) => {
             let nodes = '';
-            const hasNodes = item.nodes && item.nodes.length > 1;
+            const hasNodes = item.nodes && item.nodes.length > 0;
             if(hasNodes){
                 indent++;
                 nodes = this.renderSide(item.nodes, indent);
@@ -114,7 +64,7 @@ export default class Side extends React.Component{
                     <div className="item-text-container" onClick={(e) => {this.handleItemClick(item, e)}}>
                         {this.getIndent(indent)}
                         <span className={itemIconClass}></span>
-                        <span className="item-text">{item.text}</span>
+                        <span className="item-text">{item.render ? item.render(item.text) : item.text}</span>
                     </div>
                     {nodes ? <div ref={item.key} className={`item-nodes${itemNodesClass}`}>{nodes}</div> : ''}
                 </div>

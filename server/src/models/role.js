@@ -3,27 +3,30 @@ import {sequelize, DataTypes} from '../db/sequelize'
 import { dayFormatString, dateFormatString } from '../../../configs/base'
 import BaseEntity from './base'
 
-const Article = sequelize.define('article', {
+const Role = sequelize.define('role', {
     id:{
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
-    title:{
-        type: DataTypes.STRING(300),
+    name:{
+        type: DataTypes.STRING(100),
         allowNull: false
     },
-    views: DataTypes.INTEGER,    
+    typeName:{
+        type: DataTypes.STRING(1000),
+        allowNull: false
+    },
+    menus:{
+        type: DataTypes.STRING(5000),
+        allowNull: false
+    },
     creater:{
         type: DataTypes.INTEGER,
         allowNull: false
     },
     editer:{
         type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    content: {
-        type: DataTypes.TEXT,
         allowNull: false
     },
     createAt: {
@@ -44,8 +47,8 @@ const Article = sequelize.define('article', {
     }
 });
 
-export const entity = Article;
-export class ArticleEntity extends BaseEntity {
+export const entity = Role;
+export class UserEntity extends BaseEntity {
     constructor(ctx){
         super(entity, ctx)
     }

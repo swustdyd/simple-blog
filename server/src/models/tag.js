@@ -13,8 +13,21 @@ const Tag = sequelize.define('tag', {
         type: DataTypes.STRING(100),
         allowNull: false
     },
-    describtion:{
+    color:{
+        type: DataTypes.STRING(100),
+        defaultValue: '#dddddd',
+        allowNull: false
+    },
+    description:{
         type: DataTypes.STRING(1000),
+        allowNull: false
+    },
+    creater:{
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    editer:{
+        type: DataTypes.INTEGER,
         allowNull: false
     },
     createAt: {

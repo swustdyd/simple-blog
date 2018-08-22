@@ -7,7 +7,7 @@ const relativePath = '../public/dist/dll';
 
 module.exports = {
     entry: {
-        vendor: ['react', 'react-dom', 'react-router-dom', 'redux', 'react-redux', 'redux-thunk', 'redux-logger']
+        vendor: ['react', 'react-dom', 'react-router-dom', 'redux', 'react-redux', 'redux-thunk', 'redux-logger', 'moment']
     },
     output: {
         path: path.join(__dirname, relativePath),

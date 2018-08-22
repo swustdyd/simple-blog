@@ -17,6 +17,14 @@ const ArticleTag = sequelize.define('articleTag', {
         type: DataTypes.INTEGER,
         allowNull: false
     },
+    creater:{
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    editer:{
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
     createAt: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,

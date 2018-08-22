@@ -1,95 +1,102 @@
+@import '../../theme/_variable.scss';
 html, body{
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
+  *{
+    color: $textColor;
   }
-  $headerHeight: 60px;
-  $footerHeight: 40px;
-  
-  // hmf-layout样式
-  .hmf-layout{
-    .header,
-    .footer{
-      background-color: #20232a;
-    }
-    .header{    
-      min-height: $headerHeight;
-    }
-    .footer{    
-      min-height: $footerHeight;
-    }
-    .content{
-      overflow: hidden;
-      margin: 0 20px;
-      background-color: #fff;
+}
+$headerHeight: 60px;
+$footerHeight: 40px;
+
+// hmf-layout样式
+.hmf-layout{
+  .header,
+  .footer{
+    background-color: $headerBGColor;
+    color: $headerColor;
+    *{
+      color: $headerColor;
     }
   }
-  
-  // lr-layout样式
-  $leftLayoutWidth: 200px;
-  $lrPadding: 10px;
-  .lr-layout{
-    margin: $lrPadding 0;
-    position: relative;
-    .left-layout{
-      width: $leftLayoutWidth;
-      position: absolute;
-      height: 100%;
-    }
-    .right-layout{
-      margin-left: $leftLayoutWidth + 15px;
-      height: 100%;
-    }
+  .header{    
+    min-height: $headerHeight;
   }
-  
-  // nav样式
-  $logoWidth: 100px;
-  .nav{
-    line-height: $headerHeight;
-    .logo{
-      width: $logoWidth;
-      float: left;
-      text-align: right;
-      .icon-logo{
-        vertical-align: middle;
-        display: inline-block;
-        width: 50px;
-        height: 50px;
-        margin-right: 15px;
-        background-size: 100%;
-        background-image: url('../../images/LOGO.png');
-      }
-    }
+  .footer{    
+    min-height: $footerHeight;
   }
-  
-  // menu样式
-  .menu{
-    box-sizing: border-box;
-    margin-left: $logoWidth + 20px;
-    .menu-item{
+  .content{
+    overflow: hidden;
+    margin: 0 20px;
+    background-color: #fff;
+  }
+}
+
+// lr-layout样式
+$leftLayoutWidth: 200px;
+$lrPadding: 10px;
+.lr-layout{
+  margin: $lrPadding 0;
+  position: relative;
+  .left-layout{
+    width: $leftLayoutWidth;
+    position: absolute;
+    height: 100%;
+  }
+  .right-layout{
+    margin-left: $leftLayoutWidth + 15px;
+    height: 100%;
+  }
+}
+
+// nav样式
+$logoWidth: 100px;
+.nav{
+  line-height: $headerHeight;
+  .logo{
+    width: $logoWidth;
+    float: left;
+    text-align: right;
+    .icon-logo{
+      vertical-align: middle;
       display: inline-block;
-      height: 100%;
-      padding: 0 20px;
-      font-size: 18px;
-      >*{
-        color: aliceblue;
-        text-decoration: none;
-      }
-      >*:hover{
-        color: #61dafb;
-        cursor: pointer;
-      }
-    }
-    .menu-item-active{      
-      border-bottom: #61dafb 3px solid;
-      >*{
-        color: #61dafb;
-      }
+      width: 50px;
+      height: 50px;
+      margin-right: 15px;
+      background-size: 100%;
+      background-image: url('../../images/LOGO.png');
     }
   }
-  
-  // footer样式
-  .footer-content{
-    text-align: center;
-    color: aliceblue;
-    line-height: $footerHeight;
+}
+
+// menu样式
+.menu{
+  box-sizing: border-box;
+  margin-left: $logoWidth + 20px;
+  .menu-item{
+    display: inline-block;
+    height: 100%;
+    padding: 0 20px;
+    font-size: 18px;
+    >*{
+      text-decoration: none;
+    }
+    >*:hover{
+      color: $textHoverColor;
+      cursor: pointer;
+    }
   }
+  .menu-item-active{      
+    border-bottom: $textHoverColor 3px solid;
+    >*{
+      color: $textHoverColor;
+    }
+  }
+}
+
+// footer样式
+.footer-content{
+  text-align: center;
+  color: $textColor;
+  line-height: $footerHeight;
+}
