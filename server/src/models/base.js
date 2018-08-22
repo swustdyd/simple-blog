@@ -1,3 +1,4 @@
+import {DEFAULT_PAGESIZE}  from '../utils/setting'
 export default class BaseModel{
     constructor(model, ctx){
         if(!model){
@@ -13,6 +14,12 @@ export default class BaseModel{
     _checkOptions(options){
         if(!options.transaction && this.transaction.getTransaction()){
             options.transaction = this.transaction.getTransaction();
+        }
+        if(!options.offset){
+            options.offset = 0;
+        }
+        if(!options.limit){
+            options.limit = DEFAULT_PAGESIZE;
         }
     }
 

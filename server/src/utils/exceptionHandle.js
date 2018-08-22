@@ -30,7 +30,7 @@ export default (err, req, res, next) => {
         }
         /** 将错误信息存储 **/
         logger.error(err);
-        res.status(err.status || 500);
+        // res.status(err.status || 500);
         res.json({
             ok: false, 
             message: message, 

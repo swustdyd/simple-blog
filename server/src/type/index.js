@@ -65,6 +65,58 @@ export type ArticleTag = {
 }
 
 /**
+ * 用户数据格式
+ */
+export type User = {
+    /**
+     * 唯一id
+     */
+    id: number,
+    /**
+     * 用户名
+     */
+    name: string,
+    /**
+     * 密码
+     */
+    password: string,
+    /**
+     * 邮箱
+     */
+    email: string,
+    /**
+    * 手机
+    */
+    phone: string,
+    /**
+     * 角色id
+     */
+    roleId: number
+}
+
+/**
+ * 角色数据格式
+ */
+export type User = {
+    /**
+     * 唯一id
+     */
+    id: number,
+    /**
+     * 角色名称
+     */
+    name: string,
+    /**
+     * 类型名称
+     */
+    typeName: string,
+    /**
+    * 权限菜单
+    */
+    menus: string
+}
+
+/**
  * 接口返回的数据格式
  */
 export type ApiResponse = {
@@ -140,4 +192,10 @@ export type SolrOptionsType ={
      * 分组的字段
      */
     'facet.field': string
+}
+
+export type SearchOptions = {
+    where: {},
+    limit: number,
+    offset: number
 }
