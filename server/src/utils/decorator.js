@@ -1,12 +1,8 @@
 import BusinessException from '../models/businessException'
 import {exceptionCode} from '../utils/exceptionHandle'
 import Path from 'path'
-
-const role = {
-    normal: 0,
-    admin: 10,
-    superAdmin: 50
-};
+import jwt from 'jsonwebtoken'
+import { TOKEN_SECRET, SUPERADMIN_ROLE_ID, ADMIN_ROLE_ID, DEFAULT_USER_ID } from './setting';
 
 export const log = () => {
     return (target, name, descriptor) => {
@@ -67,12 +63,24 @@ export const requestSignin = () => {
         const oldValue = descriptor.value;
         descriptor.value = function() {
             const [req, res, next] = arguments;
-            const {user} = req.session;
-            if(!user){
-                next(new BusinessException('请登录', exceptionCode.SIGNIN));
-            }else{                
-                oldValue.apply(this, arguments);
-            }  
+            const token = req.get('Authorization');
+            if(!token){
+                next(new BusinessException('无权访问', exceptionCode.NOAUTHROITY));
+            }else{
+                jwt.verify(token, TOKEN_SECRET, (err, decoded) => {
+                    if(err){
+                        next(new BusinessException(err.message, exceptionCode.SIGNIN));
+                    }else{
+                        const {user} = decoded.data;   
+                        if(!user){
+                            next(new BusinessException('请登录', exceptionCode.SIGNIN));
+                        }else{
+                            req.token = {user};                   
+                            oldValue.apply(this, arguments);
+                        }
+                    }
+                }); 
+            }
         };
     
         return descriptor;
@@ -87,11 +95,23 @@ export const requestAdmin = () => {
         const oldValue = descriptor.value;
         descriptor.value = function() {
             const [req, res, next] = arguments;
-            const {user} = req.session;
-            if(!user || user.role < role['admin']){
-                next(new BusinessException('需要管理员权限', exceptionCode.ADMIN));
-            }else{               
-                oldValue.apply(this, arguments);
+            const token = req.get('Authorization');
+            if(!token){
+                next(new BusinessException('无权访问', exceptionCode.NOAUTHROITY));
+            }else{
+                jwt.verify(token, TOKEN_SECRET, (err, decoded) => {
+                    if(err){
+                        next(new BusinessException(err.message, exceptionCode.ADMIN));
+                    }else{
+                        const {user} = decoded.data;   
+                        if(user && (user.id === DEFAULT_USER_ID || user.roleId === ADMIN_ROLE_ID)){
+                            req.token = {user};                   
+                            oldValue.apply(this, arguments);
+                        }else{
+                            next(new BusinessException('需要管理员权限', exceptionCode.ADMIN));
+                        }
+                    }
+                }); 
             }  
         };
     
@@ -107,12 +127,24 @@ export const requestSuperAdmin = () => {
         const oldValue = descriptor.value;
         descriptor.value = function() {
             const [req, res, next] = arguments;
-            const {user} = req.session;
-            if(!user || user.role < role['superAdmin']){
-                next(new BusinessException('需要超级管理员权限', exceptionCode.SUPERADMIN));
-            }else{            
-                oldValue.apply(this, arguments);
-            }  
+            const token = req.get('Authorization');
+            if(!token){
+                next(new BusinessException('无权访问', exceptionCode.NOAUTHROITY));
+            }else{
+                jwt.verify(token, TOKEN_SECRET, (err, decoded) => {
+                    if(err){
+                        next(new BusinessException(err.message, exceptionCode.SUPERADMIN));
+                    }else{
+                        const {user} = decoded.data;   
+                        if(user && (user.id === DEFAULT_USER_ID || user.roleId === SUPERADMIN_ROLE_ID)){
+                            req.token = {user};                   
+                            oldValue.apply(this, arguments);
+                        }else{
+                            next(new BusinessException('需要超级管理员权限', exceptionCode.SUPERADMIN));
+                        }
+                    }
+                }); 
+            }
         };
     
         return descriptor;

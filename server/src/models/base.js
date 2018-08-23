@@ -29,6 +29,11 @@ export default class BaseModel{
         return await this.model.create(values, options);
     }
 
+    async count(options: Object = {}){
+        this._checkOptions(options);
+        return await this.model.count(options);
+    }
+
     async findOne(options: Object = {}){
         this._checkOptions(options);
         return await this.model.findOne(options);

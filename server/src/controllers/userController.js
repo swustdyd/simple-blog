@@ -1,11 +1,15 @@
-import { route, controller, requestSuperAdmin, Method} from '../utils/decorator'
+import { route, controller, requestSuperAdmin, Method, requestSignin} from '../utils/decorator'
 import BaseController from './baseController'
 import {SolrOptionsType} from '../type'
 import ApiResponse from '../models/apiResponse'
 import logger from '../utils/logger'
-import {PASSWORD_MD5_KEY} from '../utils/setting'
+import {PASSWORD_MD5_KEY, DEFAULT_USER_NAME, DEFAULT_USER_PASSWORD, DEFAULT_MENUS, TOKEN_SECRET, DEFAULT_USER_ID} from '../utils/setting'
 import {comparePassword} from '../utils/util'
 import BusinessException from '../models/businessException';
+import jwt from 'jsonwebtoken'
+import {OP} from '../db'
+
+const {ne} = OP;
 
 @controller()
 export default class UserController extends BaseController{
@@ -17,16 +21,16 @@ export default class UserController extends BaseController{
      * @param {*} next 
      */
     @route('/searchUsers')
-    searchUsers(req, res, next){
+    async searchUsers(req, res, next){
         try {
-            const {offset, pageSize, keyWord} = req.query;
-            const options: SolrOptionsType = {
-                start: offset,
-                rows: pageSize,
-                q: keyWord
-            }
-            throw new Error('开发中...')
-            res.send('message')
+            const {offset, pageSize} = req.query;
+            const result = await req.services.userService.searchUsers({
+                limit: pageSize,
+                offset
+            });
+            const apiRes = new ApiResponse();
+            apiRes.setResult(result);
+            res.json(apiRes)
         } catch (error) {
             next(error);
         }
@@ -43,20 +47,40 @@ export default class UserController extends BaseController{
         try {
             const { password, userName, type } = req.body;
             const apiRes = new ApiResponse();
-            const result = await req.services.userService.searchUsers({
-                where: {
-                    name: userName
-                }
-            })
-            if(!result || result.length < 1){
-                throw new BusinessException(`用户名“${userName}”不存在`)
+            if(userName === DEFAULT_USER_NAME && password === DEFAULT_USER_PASSWORD){
+                const token = jwt.sign({
+                    data: {user:{
+                        name: DEFAULT_USER_NAME,
+                        id: DEFAULT_USER_ID
+                    }}
+                }, TOKEN_SECRET);
+                apiRes.setResult({
+                    menus: DEFAULT_MENUS,
+                    token
+                })
             }else{
-                const user = result[0];
-                const isMatch = comparePassword(password, user.password, PASSWORD_MD5_KEY);
-                if(isMatch){
-                    apiRes.setMessage('登录成功')
+                const {list} = await req.services.userService.searchUsers({
+                    where: {
+                        name: userName
+                    }
+                })
+                if(!list || list.length < 1){
+                    throw new BusinessException(`用户名“${userName}”不存在`)
                 }else{
-                    throw new BusinessException('用户名或密码不正确')
+                    const user = list[0];
+                    const isMatch = comparePassword(password, user.password, PASSWORD_MD5_KEY);
+                    if(isMatch){
+                        user.password = '';
+                        const token = jwt.sign({
+                            data: {user}
+                        }, TOKEN_SECRET);
+                        apiRes.setMessage('登录成功');
+                        apiRes.setResult({
+                            token
+                        })
+                    }else{
+                        throw new BusinessException('用户名或密码不正确')
+                    }
                 }
             }
             res.json(apiRes)          
@@ -94,5 +118,63 @@ export default class UserController extends BaseController{
         }
     }
 
+    /**
+     * 保存或者修改用户
+     * @param {*} req 
+     * @param {*} res 
+     * @param {*} next 
+     */
+    @route('/saveOrUpdateUser', Method.POST)
+    async saveOrUpdateUser(req, res, next){
+        try {
+            const { user } = req.body;
+            const apiRes = new ApiResponse();
+            let result = [];
+            if(user.id){
+                result = await req.services.userService.searchUsers({
+                    where: {
+                        name: user.name,
+                        id: {
+                            [ne]: user.id
+                        }
+                    }
+                })
+            }else{
+                result = await req.services.userService.searchUsers({
+                    where: {
+                        name: user.name
+                    }
+                })
+            }
+            
+            if(result && result.length > 0){
+                throw new BusinessException(`用户名“${user.name}”已存在`)
+            }else{
+                await req.services.userService.saveOrUpdateUser(user);
+                apiRes.setMessage('保存成功')
+            }
+            res.json(apiRes)            
+        } catch (e) {
+            next(e)
+        }
+    }
 
+    /**
+     * 获取当前用户
+     * @param {*} req 
+     * @param {*} res 
+     * @param {*} next 
+     */
+    @route('/fetchCurrent')
+    @requestSignin()
+    fetchCurrent(req, res, next){
+        try {
+            const {token} = req;
+            const resApi = new ApiResponse(); 
+            resApi.setResult(token.user)
+            res.json(resApi)
+        } catch (e) {
+            next(e);
+        }
+    }
 }

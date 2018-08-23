@@ -6,7 +6,9 @@ import logger from './logger'
 import BusinessException from '../models/businessException'
 
 export const exceptionCode = {
-    DEFAULT: 500,
+    DEFAULT: 100,
+    SERVER_ERROR: 500,
+    NOAUTHROITY: 401,
     SIGNIN: 401.1,
     ADMIN: 401.2,
     SUPERADMIN: 401.3
@@ -34,7 +36,7 @@ export default (err, req, res, next) => {
         res.json({
             ok: false, 
             message: message, 
-            errorCode: err.status || exceptionCode.DEFAULT
+            errorCode: err.status || exceptionCode.SERVER_ERROR
         });
     }
     res.end();

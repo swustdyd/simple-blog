@@ -14,7 +14,14 @@ export default class UserService {
     }
 
     async searchUsers(options: SearchOptions){
-        return await this.userEntity.findAll(options)
+        const datas = await Promise.all([
+            this.userEntity.findAll(options), 
+            this.userEntity.count(options)
+        ])
+        return {
+            list: datas[0],
+            total: datas[1]
+        }
     }
 
     async getUserById(id: number){
@@ -36,8 +43,8 @@ export default class UserService {
         //修改
         if(user.id){
             user.updateAt = Date.now();
-            const originTag = await this.getTagById(user.id);
-            if(!originTag){
+            const originUser = await this.getUserById(user.id);
+            if(!originUser){
                 throw new BusinessException(`id为'${user.id}'的用户不存在`);
             }
             user = await this.userEntity.update(user, {

@@ -97,7 +97,7 @@ export type User = {
 /**
  * 角色数据格式
  */
-export type User = {
+export type Role = {
     /**
      * 唯一id
      */
@@ -113,7 +113,9 @@ export type User = {
     /**
     * 权限菜单
     */
-    menus: string
+    menus: string,
+    creater: number,
+    editer: number
 }
 
 /**
@@ -147,13 +149,9 @@ export type PageResult = {
      */
     total: number,
     /**
-     * 分页大小
-     */
-    pageSize: number,
-    /**
      * 结果
      */
-    result: any
+    list: any
 }
 
 /**

@@ -48,7 +48,7 @@ const Role = sequelize.define('role', {
 });
 
 export const entity = Role;
-export class UserEntity extends BaseEntity {
+export class RoleEntity extends BaseEntity {
     constructor(ctx){
         super(entity, ctx)
     }

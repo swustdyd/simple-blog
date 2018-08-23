@@ -11,6 +11,7 @@ import cross from './utils/cross'
 import exceptionHandle from './utils/exceptionHandle'
 import {db} from './db'
 import logger from './utils/logger'
+import pageHandle from './utils/pageHandle'
 
 db.authenticate()
     .catch((err) => {
@@ -52,6 +53,8 @@ app.use(express.static(path.resolve(BaseConfig.root, './public')));
 app.use(compression());
 
 app.use(cross);
+
+app.use(pageHandle)
 
 projectInit(app)
 
