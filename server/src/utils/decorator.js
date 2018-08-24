@@ -104,7 +104,7 @@ export const requestAdmin = () => {
                         next(new BusinessException(err.message, exceptionCode.ADMIN));
                     }else{
                         const {user} = decoded.data;   
-                        if(user && (user.id === DEFAULT_USER_ID || user.roleId === ADMIN_ROLE_ID)){
+                        if(user && (user.id === DEFAULT_USER_ID || user.roleId >= ADMIN_ROLE_ID)){
                             req.token = {user};                   
                             oldValue.apply(this, arguments);
                         }else{
@@ -136,7 +136,7 @@ export const requestSuperAdmin = () => {
                         next(new BusinessException(err.message, exceptionCode.SUPERADMIN));
                     }else{
                         const {user} = decoded.data;   
-                        if(user && (user.id === DEFAULT_USER_ID || user.roleId === SUPERADMIN_ROLE_ID)){
+                        if(user && (user.id === DEFAULT_USER_ID || user.roleId >= SUPERADMIN_ROLE_ID)){
                             req.token = {user};                   
                             oldValue.apply(this, arguments);
                         }else{

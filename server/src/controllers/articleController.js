@@ -1,4 +1,4 @@
-import { route, controller} from '../utils/decorator'
+import { route, controller, Method} from '../utils/decorator'
 import BaseController from './baseController'
 import {SolrOptionsType, Article} from '../type'
 import ApiResponse from '../models/apiResponse'
@@ -22,7 +22,7 @@ export default class ArticelController extends BaseController{
                 rows: pageSize,
                 q: keyWord
             }
-            throw new Error('开发中...')
+            throw new Error('搜索文章功能开发中...')
             res.send('message')
         } catch (error) {
             next(error);
@@ -35,37 +35,16 @@ export default class ArticelController extends BaseController{
      * @param {*} res 
      * @param {*} next 
      */
-    @route('/addArticle')
+    @route('/saveOrUpdateArticle', Method.POST)
     async addArticel(req, res, next){
         try {
-            const { article } = req.query;
-            const result = await req.services.articelService.saveOrUpdateArticle(article);
+            const { article } = req.body;
+            await req.services.articelService.saveOrUpdateArticle(article);
             const apiRes = new ApiResponse();
-            apiRes.setResult(result);
+            apiRes.setMessage('保存成功')
             res.json(apiRes)            
         } catch (e) {
             next(e)
         }
     }
-
-    /**
-     * 新增标签
-     * @param {*} req 
-     * @param {*} res 
-     * @param {*} next 
-     */
-    @route('/addTag')
-    async addTag(req, res, next){
-        try {
-            const { tag } = req.query;
-            const result = await req.services.tagService.saveOrUpdateTag(tag);
-            const apiRes = new ApiResponse();
-            apiRes.setResult(result);
-            res.json(apiRes)            
-        } catch (e) {
-            next(e)
-        }
-    }
-
-
 }

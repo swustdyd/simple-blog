@@ -14,9 +14,9 @@ export const DEFAULT_USER_PASSWORD = 'dyd123456';
 
 export const NORMAL_ROLE_ID = 1;
 
-export const ADMIN_ROLE_ID = 1;
+export const ADMIN_ROLE_ID = 2;
 
-export const SUPERADMIN_ROLE_ID = 1;
+export const SUPERADMIN_ROLE_ID = 3;
 
 export const DEFAULT_MENUS = [
     {

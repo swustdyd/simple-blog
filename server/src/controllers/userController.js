@@ -55,7 +55,7 @@ export default class UserController extends BaseController{
                     }}
                 }, TOKEN_SECRET);
                 apiRes.setResult({
-                    menus: DEFAULT_MENUS,
+                    menus: JSON.stringify(DEFAULT_MENUS),
                     token
                 })
             }else{
@@ -74,9 +74,11 @@ export default class UserController extends BaseController{
                         const token = jwt.sign({
                             data: {user}
                         }, TOKEN_SECRET);
+                        const role = await req.services.roleService.getRoleById(user.roleId);
                         apiRes.setMessage('登录成功');
                         apiRes.setResult({
-                            token
+                            token,
+                            menus: role.menus
                         })
                     }else{
                         throw new BusinessException('用户名或密码不正确')
