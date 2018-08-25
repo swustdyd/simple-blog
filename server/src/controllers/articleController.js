@@ -14,15 +14,15 @@ export default class ArticelController extends BaseController{
      * @param {*} next 
      */
     @route('/searchArticle')
-    searchArticel(req, res, next){
+    async searchArticel(req, res, next){
         try {
             const {offset, pageSize, keyWord} = req.query;
             const apiRes = new ApiResponse()
-            const result = req.services.articleService.searchArticles({
+            const result = await req.services.articleService.searchArticles({
                 limit: pageSize,
                 offset,
             })
-            apiRes.setResult(apiRes);
+            apiRes.setResult(result);
             res.json(apiRes)
         } catch (error) {
             next(error);
@@ -39,13 +39,14 @@ export default class ArticelController extends BaseController{
     @requestSignin()
     async saveOrUpdateArticle(req, res, next){
         try {
-            const { article } = req.body;
+            const { article } = req.body;            
+            const {user:{id}} = req.token;
             if(article.id){
-                article.updater = req.token.user.id;
-            }else{
-                article.creater = article.updater = req.token.user.id;
+                article.editer = id;
+            }else{                
+                article.creater = article.editer = id;
             }
-            await req.services.articelService.saveOrUpdateArticle(article);
+            await req.services.articleService.saveOrUpdateArticle(article);
             const apiRes = new ApiResponse();
             apiRes.setMessage('保存成功')
             res.json(apiRes)            

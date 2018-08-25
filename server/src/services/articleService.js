@@ -6,7 +6,7 @@ import BaseService from './BaseService'
 import {db} from '../db'
 import logger from '../utils/logger'
 
-@service('articelService')
+@service('articleService')
 export default class ArticleService{
     
     constructor(ctx){
@@ -105,10 +105,6 @@ export default class ArticleService{
             }
         })
         return result;
-    }
-
-    async searchArticle(options: SolrOptionsType){
-
     }
 
 }

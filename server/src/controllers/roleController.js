@@ -45,7 +45,7 @@ export default class RoleController extends BaseController{
             if(role.id){
                 role.editer = id;
             }else{                
-                role.creater = tag.editer = id;
+                role.creater = role.editer = id;
             }
             await req.services.roleService.saveOrUpdateRole(role)
             const apiRes = new ApiResponse();
