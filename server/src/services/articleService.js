@@ -64,9 +64,8 @@ export default class ArticleService{
             await transaction.commit();
             return newArticle;
         } catch (e) {
-            await transaction.rollback()
-            logger.error(e);
-            return null;
+            await transaction.rollback();
+            throw e;
         }               
     }
 
