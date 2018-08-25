@@ -43,7 +43,6 @@ export default class RoleService {
         //修改
         if(role.id){
             role.updateAt = Date.now();
-            role.editer = this.ctx.token.user.id;
             const originRole = await this.getRoleById(role.id);
             if(!originRole){
                 throw new BusinessException(`id为'${role.id}'的角色不存在`);
@@ -54,7 +53,6 @@ export default class RoleService {
                 }
             });
         }else{
-            role.creater = role.editer = this.ctx.token.user.id;
             role = await this.roleEntity.create(role)
         }
         return role;

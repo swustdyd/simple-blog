@@ -1,4 +1,4 @@
-import { route, controller, Method} from '../utils/decorator'
+import { route, controller, Method, requestSignin} from '../utils/decorator'
 import BaseController from './baseController'
 import {SolrOptionsType, Article} from '../type'
 import ApiResponse from '../models/apiResponse'
@@ -17,13 +17,13 @@ export default class ArticelController extends BaseController{
     searchArticel(req, res, next){
         try {
             const {offset, pageSize, keyWord} = req.query;
-            const options: SolrOptionsType = {
-                start: offset,
-                rows: pageSize,
-                q: keyWord
-            }
-            throw new Error('搜索文章功能开发中...')
-            res.send('message')
+            const apiRes = new ApiResponse()
+            const result = req.services.articleService.searchArticles({
+                limit: pageSize,
+                offset,
+            })
+            apiRes.setResult(apiRes);
+            res.json(apiRes)
         } catch (error) {
             next(error);
         }
@@ -36,9 +36,15 @@ export default class ArticelController extends BaseController{
      * @param {*} next 
      */
     @route('/saveOrUpdateArticle', Method.POST)
-    async addArticel(req, res, next){
+    @requestSignin()
+    async saveOrUpdateArticle(req, res, next){
         try {
             const { article } = req.body;
+            if(article.id){
+                article.updater = req.token.user.id;
+            }else{
+                article.creater = article.updater = req.token.user.id;
+            }
             await req.services.articelService.saveOrUpdateArticle(article);
             const apiRes = new ApiResponse();
             apiRes.setMessage('保存成功')

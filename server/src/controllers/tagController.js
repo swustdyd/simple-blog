@@ -48,6 +48,12 @@ export default class TagController extends BaseController{
     async addTag(req, res, next){
         try {
             const { tag } = req.body;
+            const {user:{id}} = req.token;
+            if(tag.id){
+                tag.editer = id;
+            }else{                
+                tag.creater = tag.editer = id;
+            }
             await req.services.tagService.saveOrUpdateTag(tag);
             const apiRes = new ApiResponse();
             apiRes.setMessage('保存成功')

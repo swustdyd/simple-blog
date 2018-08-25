@@ -41,6 +41,12 @@ export default class RoleController extends BaseController{
     async saveOrUpdateRole(req, res, next){
         try {
             const { role } = req.body;
+            const {user:{id}} = req.token;
+            if(role.id){
+                role.editer = id;
+            }else{                
+                role.creater = tag.editer = id;
+            }
             await req.services.roleService.saveOrUpdateRole(role)
             const apiRes = new ApiResponse();
             apiRes.setMessage('保存成功');

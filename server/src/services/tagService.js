@@ -37,7 +37,6 @@ export default class TagService {
         //修改
         if(tag.id){
             tag.updateAt = Date.now();
-            tag.editer = this.ctx.token.user.id;
             const originTag = await this.getTagById(tag.id);
             if(!originTag){
                 throw new BusinessException(`id为'${tag.id}'的标签不存在`);
@@ -48,7 +47,6 @@ export default class TagService {
                 }
             });
         }else{
-            tag.creater = tag.editer = this.ctx.token.user.id;
             tag = await this.tagEntity.create(tag)
         }
         return tag;

@@ -18,6 +18,7 @@ export type Article = {
      * 文章创建者
      */
     creater: number,
+    editer: number,
     /**
      * 文章内容
      */
@@ -43,7 +44,9 @@ export type Tag = {
     /**
      * 对标签的描述
      */
-    describtion: string
+    describtion: string,    
+    creater: number,
+    editer: number
 }
 
 /**
@@ -61,7 +64,9 @@ export type ArticleTag = {
     /**
      * 标签的id
      */
-    tagId: number
+    tagId: number,
+    creater: number,
+    editer: number
 }
 
 /**

@@ -15,6 +15,17 @@ export default class ArticleService{
 
     }
 
+    async searchArticles(options: SearchOptions){
+        const datas = await Promise.all([
+            this.articleEntity.findAll(options), 
+            this.articleEntity.count(options)
+        ])
+        return {
+            list: datas[0],
+            total: datas[1]
+        }
+    }
+
     async getArticleById(id: number){
         if(!id){
             throw new Error('文章的id不能为空');
@@ -56,7 +67,9 @@ export default class ArticleService{
             article.tags.forEach((tagId) => {
                 const articleTag: ArticleTag = {
                     articleId: newArticle.id,
-                    tagId: tagId
+                    tagId: tagId,
+                    creater: newArticle.creater,
+                    editer: newArticle.creater
                 };
                 articleTags.push(articleTag);
             });
