@@ -65,7 +65,7 @@ export const DEFAULT_MENUS = [
         ]
     },
     {
-        name: '报表渲染Test',
+        name: '报表管理',
         icon: 'bar-chart',
         path: 'chart',
         children: [
