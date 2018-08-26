@@ -63,5 +63,16 @@ export const DEFAULT_MENUS = [
                 path: 'detail'
             }
         ]
+    },
+    {
+        name: '报表渲染Test',
+        icon: 'bar-chart',
+        path: 'chart',
+        children: [
+          {
+            name: '报表设置',
+            path: 'setting',
+          },
+        ],
     }
 ];

@@ -55,7 +55,7 @@ export default class UserController extends BaseController{
                     }}
                 }, TOKEN_SECRET);
                 apiRes.setResult({
-                    menus: JSON.stringify(DEFAULT_MENUS),
+                    // menus: JSON.stringify(DEFAULT_MENUS),
                     token
                 })
             }else{
@@ -74,11 +74,11 @@ export default class UserController extends BaseController{
                         const token = jwt.sign({
                             data: {user}
                         }, TOKEN_SECRET);
-                        const role = await req.services.roleService.getRoleById(user.roleId);
+                        // const role = await req.services.roleService.getRoleById(user.roleId);
                         apiRes.setMessage('登录成功');
                         apiRes.setResult({
                             token,
-                            menus: role.menus
+                            // menus: role.menus
                         })
                     }else{
                         throw new BusinessException('用户名或密码不正确')
@@ -169,11 +169,18 @@ export default class UserController extends BaseController{
      */
     @route('/fetchCurrent')
     @requestSignin()
-    fetchCurrent(req, res, next){
+    async fetchCurrent(req, res, next){
         try {
-            const {token} = req;
-            const resApi = new ApiResponse(); 
-            resApi.setResult(token.user)
+            const {token: {user}} = req;
+            const resApi = new ApiResponse();
+            let menus = [];
+            if(user.id === DEFAULT_USER_ID){
+                menus = JSON.stringify(DEFAULT_MENUS);
+            }else{
+                const role = await req.services.roleService.getRoleById(user.roleId);
+                menus = role.menus;
+            } 
+            resApi.setResult({user, menus})
             res.json(resApi)
         } catch (e) {
             next(e);
