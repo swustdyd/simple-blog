@@ -22,6 +22,9 @@
         "method": "get",
         "path": "/searchRoles",
         "name": "搜索角色",
+        "middleware": [
+            "SuperAdmin"
+        ],
         "description": "搜索角色",
         "function": "searchRoles",
         "controller": "RoleController"

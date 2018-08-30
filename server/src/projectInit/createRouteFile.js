@@ -43,9 +43,4 @@ controllers.forEach((controller) => {
 })
 
 // 将所有的路由配置存储为一个文件
-const writer = fs.createWriteStream(path.resolve(__dirname, 'routeConfig.json'))
-writer.write(JSON.stringify(allRoutes, null, 4), ((err) => {
-    if(err){
-        logger.error(err);
-    }
-}))
+fs.writeFileSync(path.resolve(__dirname, 'routeConfig.json'), JSON.stringify(allRoutes, null, 4))
