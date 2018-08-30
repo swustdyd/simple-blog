@@ -35,7 +35,8 @@ controllers.forEach((controller) => {
     if(controller._routes && controller._routes.length > 0){
         controller._routes.forEach((item) => {
             const url = controller._basePath + item.path;
-            router[item.method](url, controller[item.fnName].bind(controller));
+            item.middleware = item.middleware || [];
+            router[item.method](url, ...item.middleware, controller[item.function].bind(controller));
         });
     }
 })
