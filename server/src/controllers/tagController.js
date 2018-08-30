@@ -1,20 +1,19 @@
-import { route, controller, Method, requestAdmin} from '../utils/decorator'
+import { routeFurther, controller } from '../utils/decorator'
 import BaseController from './baseController'
 import ApiResponse from '../models/apiResponse'
 import {OP} from '../db'
+import {Admin} from '../utils/authority'
 
 const {like} = OP;
 
 @controller()
 export default class TagController extends BaseController{
 
-    /**
-     * 搜索标签
-     * @param {*} req 
-     * @param {*} res 
-     * @param {*} next 
-     */
-    @route('/searchTags')
+    @routeFurther({
+        path: '/searchTags',
+        name: '搜索标签',
+        description: '搜索标签'
+    })
     async searchTags(req, res, next){
         try {
             const {offset, pageSize, name} = req.query;
@@ -37,14 +36,13 @@ export default class TagController extends BaseController{
         }
     }
 
-    /**
-     * 新增标签
-     * @param {*} req 
-     * @param {*} res 
-     * @param {*} next 
-     */
-    @route('/saveOrUpdateTag', Method.POST)
-    @requestAdmin()
+    @routeFurther({
+        path: '/saveOrUpdateTag',
+        method: 'post',
+        middleware: [Admin],
+        name: '新增标签',
+        description: '新增标签'
+    })
     async addTag(req, res, next){
         try {
             const { tag } = req.body;

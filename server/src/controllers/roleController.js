@@ -1,20 +1,20 @@
-import { route, controller, requestSuperAdmin, Method} from '../utils/decorator'
+import { routeFurther, controller} from '../utils/decorator'
 import BaseController from './baseController'
 import ApiResponse from '../models/apiResponse'
 import logger from '../utils/logger'
 import {DEFAULT_PAGESIZE} from '../utils/setting'
 import BusinessException from '../models/businessException';
+import {SuperAdmin} from '../utils/authority'
 
 @controller()
 export default class RoleController extends BaseController{
 
-    /**
-     * 搜索角色
-     * @param {*} req 
-     * @param {*} res 
-     * @param {*} next 
-     */
-    @route('/searchRoles')
+    @routeFurther({
+        path: '/searchRoles',
+        name: '搜索角色',
+        middleware: [SuperAdmin],
+        description: '搜索角色'
+    })
     async searchRoles(req, res, next){
         try {
             const {offset, pageSize} = req.query;
@@ -30,14 +30,13 @@ export default class RoleController extends BaseController{
         }
     }
 
-    /**
-     * 保存或者修改角色
-     * @param {*} req 
-     * @param {*} res 
-     * @param {*} next 
-     */
-    @route('/saveOrUpdateRole', Method.POST)
-    @requestSuperAdmin()
+    @routeFurther({
+        path: '/saveOrUpdateRole',
+        method: 'post',
+        middleware: [SuperAdmin],
+        name: '保存或者修改角色',
+        description: '保存或者修改角色'
+    })
     async saveOrUpdateRole(req, res, next){
         try {
             const { role } = req.body;

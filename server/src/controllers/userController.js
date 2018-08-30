@@ -1,4 +1,4 @@
-import { route, controller, requestSuperAdmin, Method, requestSignin} from '../utils/decorator'
+import { routeFurther, controller } from '../utils/decorator'
 import BaseController from './baseController'
 import {SolrOptionsType} from '../type'
 import ApiResponse from '../models/apiResponse'
@@ -8,19 +8,19 @@ import {comparePassword} from '../utils/util'
 import BusinessException from '../models/businessException';
 import jwt from 'jsonwebtoken'
 import {OP} from '../db'
+import {Signin, Admin} from '../utils/authority'
 
 const {ne} = OP;
 
 @controller()
 export default class UserController extends BaseController{
 
-    /**
-     * 搜索用户
-     * @param {*} req 
-     * @param {*} res 
-     * @param {*} next 
-     */
-    @route('/searchUsers')
+    @routeFurther({
+        path: '/searchUsers',
+        middleware: [Admin],
+        name: '搜索用户',
+        description: '搜索用户'
+    })
     async searchUsers(req, res, next){
         try {
             const {offset, pageSize} = req.query;
@@ -36,13 +36,12 @@ export default class UserController extends BaseController{
         }
     }
 
-    /**
-     * 用户登录
-     * @param {*} req 
-     * @param {*} res 
-     * @param {*} next 
-     */
-    @route('/login', Method.POST)
+    @routeFurther({
+        path: '/login',
+        method: 'post',
+        name: '用户登录',
+        description: '用户登录'
+    })
     async login(req, res, next){
         try {
             const { password, userName, type } = req.body;
@@ -77,7 +76,7 @@ export default class UserController extends BaseController{
                         // const role = await req.services.roleService.getRoleById(user.roleId);
                         apiRes.setMessage('登录成功');
                         apiRes.setResult({
-                            token,
+                            token
                             // menus: role.menus
                         })
                     }else{
@@ -91,13 +90,12 @@ export default class UserController extends BaseController{
         }
     }
 
-    /**
-     * 用户注册
-     * @param {*} req 
-     * @param {*} res 
-     * @param {*} next 
-     */
-    @route('/register', Method.POST)
+    @routeFurther({
+        path: '/register',
+        method: 'post',
+        name: '用户注册',
+        description: '用户注册'
+    })
     async register(req, res, next){
         try {
             const { user } = req.body;
@@ -120,13 +118,13 @@ export default class UserController extends BaseController{
         }
     }
 
-    /**
-     * 保存或者修改用户
-     * @param {*} req 
-     * @param {*} res 
-     * @param {*} next 
-     */
-    @route('/saveOrUpdateUser', Method.POST)
+    @routeFurther({
+        path: '/saveOrUpdateUser',
+        method: 'post',
+        middleware: [Admin],
+        name: '保存或者修改用户',
+        description: '保存或者修改用户'
+    })
     async saveOrUpdateUser(req, res, next){
         try {
             const { user } = req.body;
@@ -161,26 +159,25 @@ export default class UserController extends BaseController{
         }
     }
 
-    /**
-     * 获取当前用户
-     * @param {*} req 
-     * @param {*} res 
-     * @param {*} next 
-     */
-    @route('/fetchCurrent')
-    @requestSignin()
+    @routeFurther({
+        path: '/fetchCurrent',
+        middleware: [Signin],
+        name: '获取当前用户',
+        description: '获取当前用户'
+    })
     async fetchCurrent(req, res, next){
         try {
             const {token: {user}} = req;
             const resApi = new ApiResponse();
-            let menus = [];
+            let returnMenus = [];
             if(user.id === DEFAULT_USER_ID){
-                menus = JSON.stringify(DEFAULT_MENUS);
+                returnMenus = JSON.stringify(DEFAULT_MENUS);
             }else{
                 const role = await req.services.roleService.getRoleById(user.roleId);
-                menus = role.menus;
+                const {menus} = role;
+                returnMenus = menus
             } 
-            resApi.setResult({user, menus})
+            resApi.setResult({user, menus: returnMenus})
             res.json(resApi)
         } catch (e) {
             next(e);
