@@ -210,3 +210,58 @@ export const route = (path: string, method: string = Method.GET) => {
         return descriptor;
     }
 }
+
+/**
+ * 标志这是一个api接口方法，否则这个方法不会被添加到路由中
+ * @param {*} options 路由配置
+ */
+export const routeFurther = (options: {
+  path: string,
+  method?: 'get' | 'post',
+  middleware?: [(res, req, next) => {}],
+  name: string,
+  description: string
+} = {}) => {
+    return (target, name, descriptor) => {
+        if(typeof target[name] !== 'function'){
+            throw `${target.constructor.name}.${name} must be function`;
+        }
+        options = {method: 'get', ...options};
+        checkOptions(options);
+
+        target._routes = target._routes || [];
+        target._routes.push({
+            ...options,
+            function: name,
+            controller: target.constructor.name
+        });
+
+        return descriptor;
+    }
+}
+
+function checkOptions(options) {
+    const {path, name, description, middleware, method} = options;
+    if(method !== 'get' && method !== 'post'){
+        throw new Error(`method must be get or post, you got '${method}'`);
+    }
+    if(!path){
+        throw new Error('path can not be null');
+    }
+    if(!name){
+        throw new Error('name can not be null');
+    }
+    if(!description){
+        throw new Error('description can not be null');
+    }
+    if(middleware){
+        if(!(middleware instanceof Array)){
+            throw new Error('middleware must be Array');
+        }
+        middleware.forEach((func) => {
+            if(typeof func !== 'function'){
+                throw new Error('the item of middleware must be function');
+            }
+        })
+    }
+}
