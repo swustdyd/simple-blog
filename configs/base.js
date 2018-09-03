@@ -10,4 +10,5 @@ module.exports = {
     dbConnectString: 'mongodb://localhost:27017/blog',
     dayFormatString: 'YYYY-MM-DD',    
     dateFormatString: 'YYYY-MM-DD HH:mm:ss'
+    
 }
