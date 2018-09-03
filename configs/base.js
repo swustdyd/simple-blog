@@ -11,5 +11,6 @@ module.exports = {
     dayFormatString: 'YYYY-MM-DD',    
     dateFormatString: 'YYYY-MM-DD HH:mm:ss'
     dsadsa: 'dsadsa',
-    dj: 'dsds'
+    dj: 'dsds',
+    ddddd: 'dadsadsadadsa'
 }
