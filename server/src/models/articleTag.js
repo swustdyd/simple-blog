@@ -43,9 +43,9 @@ const ArticleTag = sequelize.define('articleTag', {
     }
 });
 
-export const entity = ArticleTag;
+export const ArticleTagModel = ArticleTag;
 export class ArticleTagEntity extends BaseEntity {
     constructor(ctx){
-        super(entity, ctx)
+        super(ArticleTagModel, ctx)
     }
 }

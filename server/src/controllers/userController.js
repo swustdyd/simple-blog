@@ -171,13 +171,23 @@ export default class UserController extends BaseController{
             const resApi = new ApiResponse();
             let returnMenus = [];
             if(user.id === DEFAULT_USER_ID){
-                returnMenus = JSON.stringify(DEFAULT_MENUS);
+                returnMenus = DEFAULT_MENUS;
             }else{
                 const role = await req.services.roleService.getRoleById(user.roleId);
-                const {menus} = role;
-                returnMenus = menus
+                const option = {
+                    where: {
+                        roleId: user.roleId
+                    },
+                    limit: Number.MAX_SAFE_INTEGER,
+                    offset: 0
+                }
+                const {list} = await req.services.menuService.searchMenus(option);
+                returnMenus = list;
             } 
-            resApi.setResult({user, menus: returnMenus})
+            resApi.setResult({
+                user, 
+                menus: returnMenus
+            })
             res.json(resApi)
         } catch (e) {
             next(e);

@@ -35,7 +35,7 @@ export function getAllRoutes(){
 
     // 读取controller文件夹下的文件
     const dirPath = path.resolve(__dirname, '../controllers');
-    const controllersTmp = fs.readdirSync(dirPath).map((fileName) => {
+    let controllers = fs.readdirSync(dirPath).map((fileName) => {
         const controller = require(path.join(dirPath, fileName)).default;
         if(controller && controller._isController){
             return new controller();
@@ -43,7 +43,7 @@ export function getAllRoutes(){
     })
 
     // 过滤掉undefined的项
-    const controllers = controllersTmp.filter((controller) => {
+    controllers = controllers.filter((controller) => {
         return controller !== undefined;
     })
 

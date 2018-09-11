@@ -17,10 +17,6 @@ const Role = sequelize.define('role', {
         type: DataTypes.STRING(1000),
         allowNull: false
     },
-    menus:{
-        type: DataTypes.STRING(5000),
-        allowNull: false
-    },
     creater:{
         type: DataTypes.INTEGER,
         allowNull: false
@@ -47,9 +43,9 @@ const Role = sequelize.define('role', {
     }
 });
 
-export const entity = Role;
+export const RoleModel = Role;
 export class RoleEntity extends BaseEntity {
     constructor(ctx){
-        super(entity, ctx)
+        super(RoleModel, ctx)
     }
 }

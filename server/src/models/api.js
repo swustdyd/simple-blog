@@ -30,6 +30,11 @@ const Api = sequelize.define('api', {
         type: DataTypes.STRING(100),
         allowNull: false
     },
+    status: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true
+    },
     createAt: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
@@ -48,9 +53,9 @@ const Api = sequelize.define('api', {
     }
 });
 
-export const entity = Api;
+export const ApiModel = Api;
 export class ApiEntity extends BaseEntity {
     constructor(ctx){
-        super(entity, ctx)
+        super(ApiModel, ctx)
     }
 }

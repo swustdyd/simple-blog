@@ -29,4 +29,4 @@ export const sequelize = new Sequelize('blog', 'root', 'DD89757000', {
 /**
  * sequelize数据类型: STRING,INTEGER,DATE
  */
-export const {DataTypes} = Sequelize;
+export const {DataTypes, QueryTypes} = Sequelize;

@@ -19,10 +19,28 @@ const Menu = sequelize.define('menu', {
         allowNull: false
     },
     icon:{
-        type: DataTypes.STRING(100),
-        allowNull: false
+        type: DataTypes.STRING(100)
     },
     parentMenu:{
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+    },
+    hideInMenu: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+    },
+    orderNo:{
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+    },
+    creater: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    editer: {
         type: DataTypes.INTEGER,
         allowNull: false
     },
@@ -44,9 +62,9 @@ const Menu = sequelize.define('menu', {
     }
 });
 
-export const entity = Menu;
+export const MenuModel = Menu;
 export class MenuEntity extends BaseEntity {
     constructor(ctx){
-        super(entity, ctx)
+        super(MenuModel, ctx)
     }
 }

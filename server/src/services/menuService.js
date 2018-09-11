@@ -1,8 +1,11 @@
 import {MenuEntity} from '../models/menu'
+import {RoleAndMenusModel} from '../models/roleAndMenus'
 import { SearchOptions } from '../type';
 import {service} from '../utils/decorator'
 import BusinessException from '../models/businessException'
 import {PageResult} from '../type'
+import {db} from '../db'
+import {QueryTypes} from '../db/sequelize'
 
 @service('menuService')
 export default class RoleService {
@@ -13,13 +16,44 @@ export default class RoleService {
     }
 
     async searchMenus(options: SearchOptions): Promise<PageResult>{
+        const {where = {}, offset, limit} = options;
+        const {name, parentMenu, roleId} = where;
+        const replacements = {offset, limit, name, parentMenu, roleId};
+        const selectSql = 'select m.* from menu m';
+        const pageSql = 'limit :offset, :limit';
+        let joinSql = [];
+        let whereSql = [];
+        if(name){
+
+            whereSql.push('name like \'%:name%\'')
+        }
+        if(parentMenu === 0 || parentMenu){
+            whereSql.push('parentMenu = :parentMenu')
+        }
+        if(roleId){
+            whereSql.push('ram.roleId = :roleId')
+            joinSql.push('inner join roleandmenus ram on m.id = ram.menuId')
+        }
+
+        joinSql = joinSql.join(' ');
+        whereSql = `where 1=1 ${whereSql.length > 0 ? `and ${whereSql.join(' and ')}` : ''}`
         const datas = await Promise.all([
-            this.menuEntity.findAll(options), 
-            this.menuEntity.count(options)
+            // this.menuEntity.findAll(options),
+            // this.menuEntity.count(options)
+            db.query(`${selectSql} ${joinSql} ${whereSql} ${pageSql}`, {
+                type: QueryTypes.SELECT,
+                replacements,
+                transaction: this.ctx.transaction.getTransaction()
+            }),
+            db.query(`select count(*) as total from menu m ${joinSql} ${whereSql}`, {
+                type: QueryTypes.SELECT,
+                replacements,
+                transaction: this.ctx.transaction.getTransaction()
+            })
         ])
         return {
             list: datas[0],
-            total: datas[1]
+            total: datas[1][0].total
         }
     }
 
@@ -38,15 +72,17 @@ export default class RoleService {
         //修改
         if(menu.id){
             menu.updateAt = Date.now();
-            const originRole = await this.getMenuById(menu.id);
-            if(!originRole){
+            const originMenu = await this.getMenuById(menu.id);
+            if(!originMenu){
                 throw new BusinessException(`id为'${menu.id}'的菜单不存在`);
             }
-            menu = await this.menuEntity.update(menu, {
+            await this.menuEntity.update(menu, {
                 where: {
                     id: menu.id
                 }
             });
+            // update操作只返回影响的行数，所以需要再次查询
+            menu = await this.getMenuById(menu.id)
         }else{
             menu = await this.menuEntity.create(menu)
         }

@@ -4,7 +4,7 @@
     "author": "dyd",
     "main": "app.js",
     "scripts": {
-        "s:dev": "babel-node src/projectInit/createRouteFile.js && cross-env NODE_ENV=dev nodemon --ignore node_modules --ext node,js,jade --exec  babel-node src/app.js",
+        "s:dev": "cross-env NODE_ENV=dev nodemon --ignore node_modules --ext node,js,jade --exec  babel-node src/app.js",
         "s:pro": "cross-env NODE_ENV=production nodemon --ignore node_modules --ext node,js,jade --exec babel-node src/app.js",
         "s:esl": "eslint **/*.js",
         "db": "babel-node src/db/sync.js"

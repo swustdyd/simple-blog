@@ -18,6 +18,14 @@ const RoleAndMenus = sequelize.define('roleAndMenus', {
         type: DataTypes.INTEGER,
         allowNull: false
     },
+    creater: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    editer: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
     createAt: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
@@ -36,9 +44,9 @@ const RoleAndMenus = sequelize.define('roleAndMenus', {
     }
 });
 
-export const entity = RoleAndMenus;
+export const RoleAndMenusModel = RoleAndMenus;
 export class RoleAndMenusEntity extends BaseEntity {
     constructor(ctx){
-        super(entity, ctx)
+        super(RoleAndMenusModel, ctx)
     }
 }

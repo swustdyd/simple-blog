@@ -47,11 +47,13 @@ export default class UserService {
             if(!originUser){
                 throw new BusinessException(`id为'${user.id}'的用户不存在`);
             }
-            user = await this.userEntity.update(user, {
+            await this.userEntity.update(user, {
                 where: {
                     id: user.id
                 }
             });
+            // update操作只返回影响的行数，所以需要再次查询
+            user = await this.getUserById(user.id)
         }else{
             user = await this.userEntity.create(user)
         }

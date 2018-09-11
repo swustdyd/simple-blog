@@ -49,9 +49,9 @@ const User = sequelize.define('user', {
     }
 });
 
-export const entity = User;
+export const UserModel = User;
 export class UserEntity extends BaseEntity {
     constructor(ctx){
-        super(entity, ctx)
+        super(UserModel, ctx)
     }
 }

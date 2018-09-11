@@ -38,15 +38,17 @@ export default class RoleService {
         //修改
         if(api.id){
             api.updateAt = Date.now();
-            const originRole = await this.getApiById(api.id);
-            if(!originRole){
+            const originApi = await this.getApiById(api.id);
+            if(!originApi){
                 throw new BusinessException(`id为'${api.id}'的API不存在`);
             }
-            api = await this.apiEntity.update(api, {
+            await this.apiEntity.update(api, {
                 where: {
                     id: api.id
                 }
             });
+            // update操作只返回影响的行数，所以需要再次查询
+            api = await this.getApiById(api.id)
         }else{
             api = await this.apiEntity.create(api)
         }

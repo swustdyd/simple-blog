@@ -6,11 +6,11 @@ export const TOKEN_SECRET = 'blog_manage';
 
 export const DEFAULT_ROLD_ID = 1;
 
-export const DEFAULT_USER_NAME = 'dyd';
+export const DEFAULT_USER_NAME = 'hiddenuser';
 
 export const DEFAULT_USER_ID = -1000;
 
-export const DEFAULT_USER_PASSWORD = 'dyd123456';
+export const DEFAULT_USER_PASSWORD = 'hiddenuser123456';
 
 export const NORMAL_ROLE_ID = 1;
 
@@ -20,59 +20,20 @@ export const SUPERADMIN_ROLE_ID = 3;
 
 export const DEFAULT_MENUS = [
     {
-        name: '文章管理',
-        icon: 'file-text',
-        path: 'article',
-        children: [
-            {
-                name: '文章统计',
-                path: 'chart'
-            },
-            {
-                name: '文章列表',
-                path: 'list'
-            },
-            {
-                name: '标签设置',
-                path: 'tag'
-            }
-        ]
-    },
+        'id':1, 
+        'path':'system', 
+        'name':'系统设置', 
+        'icon':'setting', 
+        'parentMenu':0,
+        'orderNo':0
+    }, 
     {
-        name: '系统设置',
-        icon: 'setting',
-        path: 'system',
-        children: [
-            {
-                name: '角色设置',
-                path: 'role'
-            },
-            {
-                name: '用户列表',
-                path: 'user-list'
-            }
-        ]
-    },
+        'id':4, 'path':'role', 'name':'角色设置', 'icon':null, 'parentMenu':1, 'orderNo':0
+    }, 
     {
-        name: '我的',
-        icon: 'user',
-        path: 'user',
-        children: [
-            {
-                name: '个人中心',
-                path: 'detail'
-            }
-        ]
-    },
+        'id':6, 'path':'menu', 'name':'菜单设置', 'icon':null, 'parentMenu':1, 'orderNo':1
+    }, 
     {
-        name: '报表管理',
-        icon: 'bar-chart',
-        path: 'chart',
-        children: [
-          {
-            name: '报表设置',
-            path: 'setting',
-          },
-        ],
+        'id':5, 'path':'userList', 'name':'用户列表', 'icon':null, 'parentMenu':1, 'orderNo':2
     }
-];
+]

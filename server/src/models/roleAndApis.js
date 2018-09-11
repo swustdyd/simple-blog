@@ -18,6 +18,14 @@ const RoleAndApis = sequelize.define('roleAndApis', {
         type: DataTypes.INTEGER,
         allowNull: false
     },
+    creater: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    editer: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
     createAt: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
@@ -36,9 +44,9 @@ const RoleAndApis = sequelize.define('roleAndApis', {
     }
 });
 
-export const entity = RoleAndApis;
+export const RoleAndApisModel = RoleAndApis;
 export class RoleAndApisEntity extends BaseEntity {
     constructor(ctx){
-        super(entity, ctx)
+        super(RoleAndApisModel, ctx)
     }
 }

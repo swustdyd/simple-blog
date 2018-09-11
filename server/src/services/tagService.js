@@ -41,11 +41,13 @@ export default class TagService {
             if(!originTag){
                 throw new BusinessException(`id为'${tag.id}'的标签不存在`);
             }
-            tag = await this.tagEntity.update(tag, {
+            await this.tagEntity.update(tag, {
                 where: {
                     id: tag.id
                 }
             });
+            // update操作只返回影响的行数，所以需要再次查询
+            tag = await this.getTagById(tag.id)
         }else{
             tag = await this.tagEntity.create(tag)
         }

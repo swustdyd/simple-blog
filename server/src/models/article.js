@@ -44,9 +44,9 @@ const Article = sequelize.define('article', {
     }
 });
 
-export const entity = Article;
+export const ArticleModel = Article;
 export class ArticleEntity extends BaseEntity {
     constructor(ctx){
-        super(entity, ctx)
+        super(ArticleModel, ctx)
     }
 }
