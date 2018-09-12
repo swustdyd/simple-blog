@@ -13,7 +13,19 @@ export default class RoleController extends BaseController{
         path: '/searchRoles',
         name: '搜索角色',
         middleware: [SuperAdmin],
-        description: '搜索角色'
+        description: '搜索角色',
+        params: {
+            offset: {
+                desc: '分页起始位置',
+                type: 'number',
+                exp: 0
+            },
+            pageSize: {
+                desc: '分页大小',
+                type: 'number',
+                exp: 10
+            }
+        }
     })
     async searchRoles(req, res, next){
         try {
@@ -35,7 +47,19 @@ export default class RoleController extends BaseController{
         method: 'post',
         middleware: [SuperAdmin],
         name: '保存或者修改角色',
-        description: '保存或者修改角色'
+        description: '保存或者修改角色',
+        params: {
+            role: {
+                desc: '提交的角色数据',
+                type: 'Object',
+                exp: '{id: number, name: string,... }'
+            },
+            roleAndMenus: {
+                desc: '该角色拥有的的菜单',
+                type: 'Array[Object]',
+                exp: '[{roleId?: number, menuId: number}]'
+            }
+        }
     })
     async saveOrUpdateRole(req, res, next){
         try {

@@ -19,7 +19,19 @@ export default class UserController extends BaseController{
         path: '/searchUsers',
         middleware: [Admin],
         name: '搜索用户',
-        description: '搜索用户'
+        description: '搜索用户',
+        params: {
+            offset: {
+                desc: '分页起始位置',
+                type: 'number',
+                exp: 0
+            },
+            pageSize: {
+                desc: '分页大小',
+                type: 'number',
+                exp: 10
+            }
+        }
     })
     async searchUsers(req, res, next){
         try {
@@ -40,7 +52,17 @@ export default class UserController extends BaseController{
         path: '/login',
         method: 'post',
         name: '用户登录',
-        description: '用户登录'
+        description: '用户登录',
+        params: {
+            userName: {
+                desc: '用户名',
+                type: 'string'
+            },
+            password: {
+                desc: '登录密码',
+                type: 'string'
+            }
+        }
     })
     async login(req, res, next){
         try {
@@ -94,7 +116,14 @@ export default class UserController extends BaseController{
         path: '/register',
         method: 'post',
         name: '用户注册',
-        description: '用户注册'
+        description: '用户注册',        
+        params: {
+            user: {
+                desc: '提交的用户数据',
+                type: 'Object',
+                exp: '{name: string, password: string, email: string,...}'
+            }
+        }
     })
     async register(req, res, next){
         try {
@@ -123,7 +152,14 @@ export default class UserController extends BaseController{
         method: 'post',
         middleware: [Admin],
         name: '保存或者修改用户',
-        description: '保存或者修改用户'
+        description: '保存或者修改用户',    
+        params: {
+            user: {
+                desc: '提交的用户数据',
+                type: 'Object',
+                exp: '{name: string, email: string,...}'
+            }
+        }
     })
     async saveOrUpdateUser(req, res, next){
         try {

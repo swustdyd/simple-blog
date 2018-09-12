@@ -6,7 +6,7 @@ import {getAllRoutes} from '../utils/util'
 import logger from '../utils/logger';
 
 @controller()
-export default class MenuController extends BaseController{
+export default class ApiController extends BaseController{
 
     @routeFurther({
         path: '/getAllRoutes',
@@ -14,7 +14,7 @@ export default class MenuController extends BaseController{
         middleware: [SuperAdmin],
         description: '获取所有后台API接口'
     })
-    searchMenus(req, res, next){
+    searchApis(req, res, next){
         try {
             if(!global.allRoutes){
                 global.allRoutes = getAllRoutes();

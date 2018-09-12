@@ -12,7 +12,31 @@ export default class MenuController extends BaseController{
     @routeFurther({
         path: '/searchMenus',
         name: '搜索菜单',
-        description: '搜索菜单'
+        description: '搜索菜单',
+        params: {
+            offset: {
+                desc: '分页起始位置',
+                type: 'number',
+                exp: 0
+            },
+            pageSize: {
+                desc: '分页大小',
+                type: 'number',
+                exp: 10
+            },
+            name: {
+                desc: '菜单名称，模糊查询',
+                type: 'string'
+            },
+            parentMenu: {
+                desc: '菜单的父级菜单Id',
+                type: 'number'
+            },
+            roleId: {
+                desc: '拥有该菜单的角色Id',
+                type: 'number'
+            }
+        }
     })
     async searchMenus(req, res, next){
         try {
@@ -60,7 +84,19 @@ export default class MenuController extends BaseController{
         method: 'post',
         middleware: [SuperAdmin],
         name: '新增菜单',
-        description: '新增菜单'
+        description: '新增菜单',
+        params: {
+            role: {
+                desc: '提交的菜单数据',
+                type: 'Object',
+                exp: '{id: number, name: string,... }'
+            },
+            siblingMenus: {
+                desc: '其他同级菜单数据',
+                type: 'Array[Object]',
+                exp: '[{id: number, name: string,... },...]'
+            }
+        }
     })
     async addMenu(req, res, next){
         try {
