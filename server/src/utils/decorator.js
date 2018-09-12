@@ -220,7 +220,14 @@ export const routeFurther = (options: {
   method?: 'get' | 'post',
   middleware?: [(res, req, next) => {}],
   name: string,
-  description: string
+  description: string,
+  params: {
+      name: {
+          desc: string,
+          type: string,
+          exp: any
+      }
+  }
 } = {}) => {
     return (target, name, descriptor) => {
         if(typeof target[name] !== 'function'){

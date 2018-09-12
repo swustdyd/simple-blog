@@ -56,10 +56,21 @@ export function getAllRoutes(){
                     names = route.middleware.map((item) => {
                         return item.name;
                     })
-                }            
+                }
+                const params = [];
+                if(route.params && Object.keys(route.params).length > 0){
+                    Object.keys(route.params).forEach((key) => {
+                        const item = route.params[key];
+                        params.push({
+                            ...item,
+                            name: key
+                        })
+                    })
+                }
                 allRoutes.push({
                     ...route,
-                    middleware: names.length > 0 ? names : undefined
+                    middleware: names.length > 0 ? names : undefined,
+                    params
                 });
             })
         }
