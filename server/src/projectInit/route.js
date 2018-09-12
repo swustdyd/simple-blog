@@ -36,7 +36,7 @@ controllers.forEach((controller) => {
         controller._routes.forEach((item) => {
             const url = controller._basePath + item.path;
             item.middleware = item.middleware || [];
-            router[item.method](url, ...item.middleware, controller[item.function].bind(controller));
+            router[item.method](url, ...item.middleware, controller[item.functionName].bind(controller));
         });
     }
 })

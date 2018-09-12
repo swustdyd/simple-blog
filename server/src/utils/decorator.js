@@ -232,7 +232,7 @@ export const routeFurther = (options: {
         target._routes = target._routes || [];
         target._routes.push({
             ...options,
-            function: name,
+            functionName: name,
             controller: target.constructor.name
         });
 
