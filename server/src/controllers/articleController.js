@@ -36,7 +36,7 @@ export default class ArticelController extends BaseController{
      */
     @routeFurther({
         method: 'post',
-        path: '/searchArticle',
+        path: '/saveOrUpdateArticle',
         name: '新增文章',
         description: '新增一篇文章',
         middleware: [Signin]
