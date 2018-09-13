@@ -18,13 +18,16 @@ const Api = sequelize.define('api', {
         type: DataTypes.STRING(200),
         allowNull: false
     },
-    function:{
+    functionName:{
         type: DataTypes.STRING(1000),
         allowNull: false
     },
     controller:{
         type: DataTypes.STRING(100),
         allowNull: false
+    },
+    params:{
+        type: DataTypes.STRING(2000)
     },
     method:{
         type: DataTypes.STRING(100),
