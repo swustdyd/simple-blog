@@ -55,9 +55,14 @@ export default class RoleController extends BaseController{
                 exp: '{id: number, name: string,... }'
             },
             roleAndMenus: {
-                desc: '该角色拥有的的菜单',
+                desc: '该角色拥有的的菜单访问权限',
                 type: 'Array[Object]',
                 exp: '[{roleId?: number, menuId: number}]'
+            },
+            roleAndApis: {
+                desc: '该角色拥有的Server Api访问权限',
+                type: 'Array[Obejct]',
+                exp: '[{roleId?: number, apiId: number,...},...]'
             }
         }
     })
@@ -70,7 +75,7 @@ export default class RoleController extends BaseController{
             }else{                
                 role.creater = role.editer = id;
             }
-            await req.services.roleService.saveOrUpdateRole(role, roleAndMenus)
+            await req.services.roleService.saveOrUpdateRole(role, roleAndMenus, roleAndApis)
             const apiRes = new ApiResponse();
             apiRes.setMessage('保存成功');
             res.json(apiRes)          
