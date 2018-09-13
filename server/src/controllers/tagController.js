@@ -2,7 +2,7 @@ import { routeFurther, controller } from '../utils/decorator'
 import BaseController from './baseController'
 import ApiResponse from '../models/apiResponse'
 import {OP} from '../db'
-import {Admin} from '../utils/authority'
+import {Authority} from '../utils/authority'
 
 const {like} = OP;
 
@@ -12,7 +12,8 @@ export default class TagController extends BaseController{
     @routeFurther({
         path: '/searchTags',
         name: '搜索标签',
-        description: '搜索标签'
+        description: '搜索标签',
+        middleware: [Authority]
     })
     async searchTags(req, res, next){
         try {
@@ -39,7 +40,7 @@ export default class TagController extends BaseController{
     @routeFurther({
         path: '/saveOrUpdateTag',
         method: 'post',
-        middleware: [Admin],
+        middleware: [Authority],
         name: '新增标签',
         description: '新增标签'
     })

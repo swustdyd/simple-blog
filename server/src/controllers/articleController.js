@@ -3,7 +3,7 @@ import BaseController from './baseController'
 import {SolrOptionsType, Article} from '../type'
 import ApiResponse from '../models/apiResponse'
 import logger from '../utils/logger'
-import {Signin} from '../utils/authority'
+import {Authority} from '../utils/authority'
 
 // @controller()
 export default class ArticelController extends BaseController{
@@ -39,7 +39,7 @@ export default class ArticelController extends BaseController{
         path: '/saveOrUpdateArticle',
         name: '新增文章',
         description: '新增一篇文章',
-        middleware: [Signin]
+        middleware: [Authority]
     })
     async saveOrUpdateArticle(req, res, next){
         try {

@@ -2,7 +2,7 @@ import { routeFurther, controller } from '../utils/decorator'
 import BaseController from './baseController'
 import ApiResponse from '../models/apiResponse'
 import {OP} from '../db'
-import {SuperAdmin} from '../utils/authority'
+import {Authority} from '../utils/authority'
 
 const {like, eq} = OP;
 
@@ -13,6 +13,7 @@ export default class MenuController extends BaseController{
         path: '/searchMenus',
         name: '搜索菜单',
         description: '搜索菜单',
+        middleware: [Authority],
         params: {
             offset: {
                 desc: '分页起始位置',
@@ -62,7 +63,7 @@ export default class MenuController extends BaseController{
     @routeFurther({
         path: '/getAllMenus',
         name: '获取所有的菜单信息',
-        middleware: [SuperAdmin],
+        middleware: [Authority],
         description: '获取所有的菜单信息'
     })
     async getAllMenus(req, res, next){
@@ -82,7 +83,7 @@ export default class MenuController extends BaseController{
     @routeFurther({
         path: '/saveOrUpdateMenu',
         method: 'post',
-        middleware: [SuperAdmin],
+        middleware: [Authority],
         name: '新增菜单',
         description: '新增菜单',
         params: {

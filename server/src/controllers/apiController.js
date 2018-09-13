@@ -1,7 +1,7 @@
 import { routeFurther, controller } from '../utils/decorator'
 import BaseController from './baseController'
 import ApiResponse from '../models/apiResponse'
-import {SuperAdmin} from '../utils/authority'
+import {Authority} from '../utils/authority'
 import {getAllRoutes} from '../utils/util'
 import logger from '../utils/logger';
 
@@ -11,7 +11,7 @@ export default class ApiController extends BaseController{
     @routeFurther({
         path: '/getAllApis',
         name: '获取所有后台API接口',
-        middleware: [SuperAdmin],
+        middleware: [Authority],
         description: '获取所有后台API接口'
     })
     async getAllApis(req, res, next){
@@ -31,7 +31,7 @@ export default class ApiController extends BaseController{
     @routeFurther({
         path: '/searchRoutes',
         name: '搜索API接口',
-        middleware: [SuperAdmin],
+        middleware: [Authority],
         description: '搜索API接口',
         params: {
             offset: {

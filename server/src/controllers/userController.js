@@ -8,7 +8,7 @@ import {comparePassword} from '../utils/util'
 import BusinessException from '../models/businessException';
 import jwt from 'jsonwebtoken'
 import {OP} from '../db'
-import {Signin, Admin} from '../utils/authority'
+import {Authority} from '../utils/authority'
 
 const {ne} = OP;
 
@@ -17,7 +17,7 @@ export default class UserController extends BaseController{
 
     @routeFurther({
         path: '/searchUsers',
-        middleware: [Admin],
+        middleware: [Authority],
         name: '搜索用户',
         description: '搜索用户',
         params: {
@@ -150,7 +150,7 @@ export default class UserController extends BaseController{
     @routeFurther({
         path: '/saveOrUpdateUser',
         method: 'post',
-        middleware: [Admin],
+        middleware: [Authority],
         name: '保存或者修改用户',
         description: '保存或者修改用户',    
         params: {
@@ -197,7 +197,7 @@ export default class UserController extends BaseController{
 
     @routeFurther({
         path: '/fetchCurrent',
-        middleware: [Signin],
+        middleware: [Authority],
         name: '获取当前用户',
         description: '获取当前用户'
     })

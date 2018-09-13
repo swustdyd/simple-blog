@@ -4,7 +4,7 @@ import ApiResponse from '../models/apiResponse'
 import logger from '../utils/logger'
 import {DEFAULT_PAGESIZE} from '../utils/setting'
 import BusinessException from '../models/businessException';
-import {SuperAdmin} from '../utils/authority'
+import {Authority} from '../utils/authority'
 
 @controller()
 export default class RoleController extends BaseController{
@@ -12,7 +12,7 @@ export default class RoleController extends BaseController{
     @routeFurther({
         path: '/searchRoles',
         name: '搜索角色',
-        middleware: [SuperAdmin],
+        middleware: [Authority],
         description: '搜索角色',
         params: {
             offset: {
@@ -45,7 +45,7 @@ export default class RoleController extends BaseController{
     @routeFurther({
         path: '/saveOrUpdateRole',
         method: 'post',
-        middleware: [SuperAdmin],
+        middleware: [Authority],
         name: '保存或者修改角色',
         description: '保存或者修改角色',
         params: {
