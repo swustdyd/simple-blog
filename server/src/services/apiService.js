@@ -3,6 +3,8 @@ import { SearchOptions } from '../type';
 import {service} from '../utils/decorator'
 import BusinessException from '../models/businessException'
 import {PageResult} from '../type'
+import {db} from '../db'
+import {QueryTypes} from '../db/sequelize'
 
 @service('apiService')
 export default class RoleService {
@@ -13,13 +15,41 @@ export default class RoleService {
     }
 
     async searchApis(options: SearchOptions): Promise<PageResult>{
+        const {where = {}, offset, limit} = options;
+        const {name, path, roleId} = where;
+        const replacements = {offset, limit, name, path, roleId};
+        const selectSql = 'select a.* from api a';
+        const pageSql = 'limit :offset, :limit';
+        let joinSql = [];
+        let whereSql = [];
+        if(name){
+            whereSql.push('name like \'%:name%\'')
+        }
+        if(path){
+            whereSql.push('path like \'%:path%\'')
+        }
+        if(roleId){
+            whereSql.push('rar.roleId = :roleId')
+            joinSql.push('inner join roleandapis rar on a.id = rar.apiId')
+        }
+
+        joinSql = joinSql.join(' ');
+        whereSql = `where 1=1 ${whereSql.length > 0 ? `and ${whereSql.join(' and ')}` : ''}`
         const datas = await Promise.all([
-            this.apiEntity.findAll(options), 
-            this.apiEntity.count(options)
+            db.query(`${selectSql} ${joinSql} ${whereSql} ${pageSql}`, {
+                type: QueryTypes.SELECT,
+                replacements,
+                transaction: this.ctx.transaction.getTransaction()
+            }),
+            db.query(`select count(*) as total from api a ${joinSql} ${whereSql}`, {
+                type: QueryTypes.SELECT,
+                replacements,
+                transaction: this.ctx.transaction.getTransaction()
+            })
         ])
         return {
             list: datas[0],
-            total: datas[1]
+            total: datas[1][0].total
         }
     }
 

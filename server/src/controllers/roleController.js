@@ -68,7 +68,7 @@ export default class RoleController extends BaseController{
     })
     async saveOrUpdateRole(req, res, next){
         try {
-            const { role, roleAndMenus } = req.body;
+            const { role, roleAndMenus, roleAndApis } = req.body;
             const {user:{id}} = req.token;
             if(role.id){
                 role.editer = id;

@@ -5,7 +5,7 @@ import ApiResponse from '../models/apiResponse'
 import logger from '../utils/logger'
 import {Signin} from '../utils/authority'
 
-@controller()
+// @controller()
 export default class ArticelController extends BaseController{
 
     @routeFurther({

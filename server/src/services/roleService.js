@@ -36,7 +36,7 @@ export default class RoleService {
         });
     }
 
-    async saveOrUpdateRole(role: Role, roleAndMenus = []){
+    async saveOrUpdateRole(role: Role, roleAndMenus = [], roleAndApis = []){
         const {transaction, services} = this.ctx;
         await transaction.startTransaction();
         try {
@@ -54,11 +54,17 @@ export default class RoleService {
                 });
                 // update操作只返回影响的行数，所以需要再次查询
                 role = await this.getRoleById(role.id)
-                await services.roleAndMenuService.deleteRoleAndMenusByRoleId(role.id)
+                //先删除原有的数据
+                await Promise.all([
+                    services.roleAndMenuService.deleteRoleAndMenusByRoleId(role.id),
+                    services.roleAndApiService.deleteRoleAndApiByRoleId(role.id)
+                ])
+                // await services.roleAndMenuService.deleteRoleAndMenusByRoleId(role.id)
+                // await services.roleAndApiService.deleteRoleAndApiByRoleId(role.id)
             }else{
                 role = await this.roleEntity.create(role)
             }
-            // 新增roleAndMenus
+
             roleAndMenus = roleAndMenus.map((item) => {
                 return {
                     ...item,
@@ -67,7 +73,23 @@ export default class RoleService {
                     editer: role.editer
                 };
             });
-            await services.roleAndMenuService.saveOrUpdateRoleAndMenus(roleAndMenus)
+            
+            roleAndApis = roleAndApis.map((item) => {
+                return {
+                    ...item,
+                    roleId: role.id,
+                    creater: role.editer,
+                    editer: role.editer
+                }
+            });
+
+            // 新增roleAndApis与roleAndMenus
+            await Promise.all([
+                services.roleAndMenuService.saveOrUpdateRoleAndMenus(roleAndMenus),
+                services.roleAndApiService.saveOrUpdateRoleAndApis(roleAndApis)
+            ])
+            // await services.roleAndMenuService.saveOrUpdateRoleAndMenus(roleAndMenus)
+            // await services.roleAndApiService.saveOrUpdateRoleAndApis(roleAndApis)
             await transaction.commit(); 
             return role;
         } catch (error) {

@@ -6,7 +6,7 @@ import {Admin} from '../utils/authority'
 
 const {like} = OP;
 
-@controller()
+// @controller()
 export default class TagController extends BaseController{
 
     @routeFurther({
