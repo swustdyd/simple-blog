@@ -1,6 +1,6 @@
-import {exceptionCode} from '../utils/exceptionHandle'
+import {exceptionCode} from './exceptionHandle'
 import jwt from 'jsonwebtoken'
-import { TOKEN_SECRET, SUPERADMIN_ROLE_ID, ADMIN_ROLE_ID, DEFAULT_USER_ID } from './setting';
+import { TOKEN_SECRET, SUPERADMIN_ROLE_ID, ADMIN_ROLE_ID, DEFAULT_USER_ID } from '../utils/setting';
 import BusinessException from '../models/businessException';
 
 /**

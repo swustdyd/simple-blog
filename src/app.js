@@ -7,11 +7,11 @@ import fs from 'fs'
 import compression from 'compression'
 import projectInit from './projectInit'
 import BaseConfig from '../configs'
-import cross from './utils/cross'
-import exceptionHandle from './utils/exceptionHandle'
+// import cross from './utils/cross'
+// import exceptionHandle from './utils/exceptionHandle'
 import {db} from './db'
 import logger from './utils/logger'
-import pageHandle from './utils/pageHandle'
+// import pageHandle from './utils/pageHandle'
 
 db.authenticate()
     .catch((err) => {
@@ -52,13 +52,23 @@ app.use(express.static(path.resolve(BaseConfig.root, './public')));
 
 app.use(compression());
 
-app.use(cross);
+// 读取middlewares文件夹下的文件
+const dirPath = path.resolve(__dirname, './middlewares');
 
-app.use(pageHandle)
+fs.readdirSync(dirPath).forEach((fileName) => {
+    const middleware = require(path.join(dirPath, fileName)).default;
+    if(middleware){      
+        app.use(middleware);
+    }
+})
+
+// app.use(cross);
+
+// app.use(pageHandle)
 
 projectInit(app)
 
-app.use(exceptionHandle);
+// app.use(exceptionHandle);
 
 app.listen(serverPort, function () {
     console.log(`Simple project(${process.env.NODE_ENV}) is running on port ${serverPort}`);

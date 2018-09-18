@@ -8,7 +8,7 @@ import {comparePassword} from '../utils/util'
 import BusinessException from '../models/businessException';
 import jwt from 'jsonwebtoken'
 import {OP} from '../db'
-import {Authority} from '../utils/authority'
+import {Authority} from '../middlewares/authority'
 
 const {ne} = OP;
 

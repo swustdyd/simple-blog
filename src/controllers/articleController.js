@@ -3,7 +3,7 @@ import BaseController from './baseController'
 import {SolrOptionsType, Article} from '../type'
 import ApiResponse from '../models/apiResponse'
 import logger from '../utils/logger'
-import {Authority} from '../utils/authority'
+import {Authority} from '../middlewares/authority'
 
 // @controller()
 export default class ArticelController extends BaseController{

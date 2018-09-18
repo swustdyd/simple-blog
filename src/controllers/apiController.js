@@ -1,7 +1,7 @@
 import { routeFurther, controller } from '../utils/decorator'
 import BaseController from './baseController'
 import ApiResponse from '../models/apiResponse'
-import {Authority} from '../utils/authority'
+import {Authority} from '../middlewares/authority'
 import {getAllRoutes} from '../utils/util'
 import logger from '../utils/logger';
 

@@ -4,7 +4,7 @@ import ApiResponse from '../models/apiResponse'
 import logger from '../utils/logger'
 import {DEFAULT_PAGESIZE} from '../utils/setting'
 import BusinessException from '../models/businessException';
-import {Authority} from '../utils/authority'
+import {Authority} from '../middlewares/authority'
 
 @controller()
 export default class RoleController extends BaseController{

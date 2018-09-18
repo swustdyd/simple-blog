@@ -2,7 +2,7 @@
  * Created by Aaron on 2018/1/5.
  */
 //日志打印
-import logger from './logger'
+import logger from '../utils/logger'
 import BusinessException from '../models/businessException'
 
 export const exceptionCode = {
