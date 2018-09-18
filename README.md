@@ -28,4 +28,5 @@
 - README.md
 
 # Usege
+- run `npm install`
 - run `npm run dev` to start server

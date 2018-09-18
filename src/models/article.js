@@ -1,6 +1,6 @@
 import moment from 'moment'
 import {sequelize, DataTypes} from '../db/sequelize'
-import { dayFormatString, dateFormatString } from '../../../configs/base'
+import { dayFormatString, dateFormatString } from '../../configs'
 import BaseEntity from './base'
 
 const Article = sequelize.define('article', {

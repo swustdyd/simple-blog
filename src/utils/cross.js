@@ -1,4 +1,4 @@
-import BaseConfig from '../../../configs/base'
+import BaseConfig from '../../configs'
 
 /**
  * 设置允许跨域的host
