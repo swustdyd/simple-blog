@@ -2,61 +2,30 @@
 # Project dir
 - configs
     - base.js
-- client
-    - node_modules
-    - src
-        - components
-            - asyncComponent.js
-            - menu.js
-        - images
-            - LOGO.png  
-        - layout
-            - footer.js
-            - hmfLayout.js
-            - lrLayout.js
-            - nav.js
-        - pages
-            - about.js
-            - index.js
-            - layoutDemo.js
-        - app.js
-        - app.scss
-        - index.html
-        - util.js
-    - .babelrc
-    - package.json
-    - webpack.config.js
-    - webpack.dll.config.js
 - logs
 - public
     - dist
         - dll
-- server
-    - node_modules
-    - src
-        - controllers
-            - demo.js
-        - models
-            - demo.js
-        - schemas
-            - demo.js
-        - services
-            - demo.js
-        - utils
-            - logger.js
-        - app.js
-        - route.js
-    - .babelrc
-    - .eslintignore
-    - .eslintrc.js
-    - package.lock.json
-    - package.json
+- node_modules
+- src
+    - controllers
+        - demo.js
+    - models
+        - demo.js
+    - schemas
+        - demo.js
+    - services
+        - demo.js
+    - utils
+        - logger.js
+    - app.js
+    - route.js
+- .babelrc
+- .eslintignore
+- .eslintrc.js
+- package.lock.json
+- package.json
 - README.md
 
 # Usege
-- into the directory `server`
-- run `npm run s:dev` to start server
-- into the directory `client`
-- run `npm run c:dll` to packge the third dependencies into the `public/dist/dll`
-- run `npm run c:dev` to start client
-- then open `http://localhost:3000/dist/index.html` to see the result
+- run `npm run dev` to start server
