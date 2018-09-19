@@ -27,5 +27,8 @@ export default (req, res, next) => {
     req.services = services;
     ctx.services = services;
     ctx.req = req;
+    serviceArray.forEach((service) => {
+        services[service._name].ctx = ctx;
+    });
     next();
 };
