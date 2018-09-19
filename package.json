@@ -4,7 +4,7 @@
   "author": "dyd",
   "main": "app.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=dev nodemon --ignore node_modules --ext node,js,jade --exec  babel-node src/app.js",
+    "dev": "cross-env NODE_ENV=dev nodemon --ignore node_modules --ignore src/type/ --ext node,js,jade --exec  babel-node src/app.js",
     "pro": "cross-env NODE_ENV=production nodemon --ignore node_modules --ext node,js,jade --exec babel-node src/app.js",
     "eslint": "eslint **/*.js",
     "db": "babel-node src/db/sync.js"

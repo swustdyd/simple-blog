@@ -1,13 +1,13 @@
 import {ApiEntity} from '../models/api'
 import { SearchOptions } from '../type';
-import {service} from '../utils/decorator'
+import {service, serviceComment} from '../utils/decorator'
 import BusinessException from '../models/businessException'
 import {PageResult} from '../type'
 import {db} from '../db'
 import {QueryTypes} from '../db/sequelize'
 
 @service('apiService')
-export default class RoleService {
+export default class ApiService {
 
     constructor(ctx){
         this.ctx = ctx;
@@ -53,6 +53,18 @@ export default class RoleService {
         }
     }
 
+    @serviceComment({
+        desc: '根据api的id获取api信息',
+        params: {
+            id: {
+                desc: 'api的id',
+                type: 'number'
+            }
+        },
+        return: {
+            type: 'Promise<ApiEntity>'
+        }
+    })
     async getApiById(id: number){
         if(!id){
             throw new Error('菜单id不能为空');

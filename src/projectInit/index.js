@@ -1,3 +1,4 @@
+import './createServiceType'
 import router from './route'
 import service from './service'
 

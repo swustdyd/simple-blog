@@ -1,12 +1,14 @@
-import {ServicesType} from '../type'
+import {ServiceType} from '../type/service'
 
 export default class BaseController{
     constructor(){
 
-        const services: ServicesType = '';
+        const services: ServiceType = '';
         /**
-         * 服务
+         * 上下文
          */
-        this.services = services;
+        this.ctx = {
+            services
+        }
     }
 }

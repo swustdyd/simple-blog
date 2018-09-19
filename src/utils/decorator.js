@@ -175,7 +175,7 @@ export const controller = (basePath: string) => {
  * @param name service名称，在controller通过req.services.name获取该服务实例,
  * 在service中可通过this.ctx.services.name获取该服务实例
  */
-export const service = (name: string) => {
+export const service = (name: string, desc: string) => {
     if(!global.serviceNames){
         global.serviceNames = {};
     }
@@ -186,6 +186,7 @@ export const service = (name: string) => {
     return (target) => {
         target._isService = true;
         target._name = name;
+        target._desc = desc;
     };
 }
 
@@ -270,5 +271,29 @@ function checkOptions(options) {
                 throw new Error('the item of middleware must be function');
             }
         })
+    }
+}
+
+/**
+ * 对该方法进行注释，生成对应type文件
+ * @param {*} options 
+ */
+export const serviceComment = (options: {
+    desc: string,
+    params: {
+        name: {
+            desc: string,
+            type: string
+        }
+    },
+    return: {
+        desc: string,
+        type: string
+    }
+}) => {
+    return (target, name, descriptor) => {
+        target._comments = target._comments || {};
+        target._comments[name] = options;
+        return descriptor;
     }
 }
