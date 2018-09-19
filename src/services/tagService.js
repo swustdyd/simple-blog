@@ -3,7 +3,7 @@ import { Tag } from '../type';
 import {service} from '../utils/decorator'
 import BusinessException from '../models/businessException'
 
-@service('tagService')
+// @service('tagService')
 export default class TagService {
 
     constructor(ctx){

@@ -4,7 +4,7 @@ import { ArticleTag } from '../type';
 import BusinessException from '../models/businessException'
 import {db} from '../db'
 
-@service('articleTagService')
+// @service('articleTagService')
 export default class ArticelTagService {
 
     constructor(ctx){

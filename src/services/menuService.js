@@ -1,20 +1,32 @@
 import {MenuEntity} from '../models/menu'
 import {RoleAndMenusModel} from '../models/roleAndMenus'
 import { SearchOptions } from '../type';
-import {service} from '../utils/decorator'
+import {service, serviceComment} from '../utils/decorator'
 import BusinessException from '../models/businessException'
 import {PageResult} from '../type'
 import {db} from '../db'
 import {QueryTypes} from '../db/sequelize'
 
-@service('menuService')
+@service('menuService', '菜单service')
 export default class RoleService {
 
     constructor(ctx){
         this.ctx = ctx;
         this.menuEntity = new MenuEntity(ctx);
     }
-
+    @serviceComment({
+        desc: '搜索菜单',
+        params: {
+            options: {
+                desc: '搜索条件',
+                type: '@SearchOptions@'
+            }
+        },
+        returns: {
+            desc: '搜索结果',
+            type: 'Promise<@PageResult@>'
+        }
+    })
     async searchMenus(options: SearchOptions): Promise<PageResult>{
         const {where = {}, offset, limit} = options;
         const {name, parentMenu, roleId} = where;

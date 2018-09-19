@@ -1,6 +1,6 @@
 import {RoleEntity} from '../models/role'
 import { Role, SearchOptions } from '../type';
-import {service} from '../utils/decorator'
+import {service, serviceComment} from '../utils/decorator'
 import BusinessException from '../models/businessException'
 import {md5Password} from '../utils/util'
 import {PASSWORD_MD5_KEY} from '../utils/setting'
@@ -36,6 +36,27 @@ export default class RoleService {
         });
     }
 
+    @serviceComment({
+        desc: '保存或者修改角色信息',
+        params: {
+            role: {
+                desc: '角色信息，有该id则为更新，无该id则新增',
+                type: 'Object'
+            },
+            roleAndMenus: {
+                desc: '该角色拥有的菜单浏览权限',
+                type: '[Object]'
+            },
+            roleAndApis: {
+                desc: '该角色拥有的后台Api访问权限',
+                type: '[Object]'
+            }
+        },
+        returns: {
+            desc: '存储后的角色信息',
+            type: 'Promise<Object>'
+        }
+    })
     async saveOrUpdateRole(role: Role, roleAndMenus = [], roleAndApis = []){
         const {transaction, services} = this.ctx;
         await transaction.startTransaction();
@@ -97,7 +118,20 @@ export default class RoleService {
             throw error;
         }        
     }
-
+    
+    @serviceComment({
+        desc: '批量保存或者修改角色信息',
+        params: {
+            roles: {
+                desc: '角色信息数组',
+                type: '[Object]'
+            }
+        },
+        returns: {
+            desc: '存储后的角色信息',
+            type: 'Promise<[Object]>'
+        }
+    })
     async saveOrUpdateRoles(roles: Role[]){
         const promiseList = [];
         roles.forEach((role) => {

@@ -6,7 +6,7 @@ import BaseService from './BaseService'
 import {db} from '../db'
 import logger from '../utils/logger'
 
-@service('articleService')
+// @service('articleService')
 export default class ArticleService{
     
     constructor(ctx){

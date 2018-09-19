@@ -286,7 +286,7 @@ export const serviceComment = (options: {
             type: string
         }
     },
-    return: {
+    returns: {
         desc: string,
         type: string
     }

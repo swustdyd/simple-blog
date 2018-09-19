@@ -6,7 +6,7 @@ import {PageResult} from '../type'
 import {db} from '../db'
 import {QueryTypes} from '../db/sequelize'
 
-@service('apiService')
+@service('apiService', '后台Api服务')
 export default class ApiService {
 
     constructor(ctx){
@@ -14,6 +14,19 @@ export default class ApiService {
         this.apiEntity = new ApiEntity(ctx);
     }
 
+    @serviceComment({
+        desc: '搜索后台Api',
+        params: {
+            options: {
+                desc: '搜索条件',
+                type: '@SearchOptions@'
+            }
+        },
+        returns: {
+            desc: '搜索结果',
+            type: 'Promise<@PageResult@>'
+        }
+    })
     async searchApis(options: SearchOptions): Promise<PageResult>{
         const {where = {}, offset, limit} = options;
         const {name, path, roleId} = where;

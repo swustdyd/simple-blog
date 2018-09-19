@@ -1,14 +1,38 @@
 import fs from 'fs'
 import path from 'path'
 
+const lineBreak = '\r\n';
+let extraTypes = [];
+
+function getType(typeString = ''){
+    const start = typeString.indexOf('@');
+    const end = typeString.lastIndexOf('@');
+    if(start !== -1 && end !== -1){
+        const extraType = typeString.substring(start + 1, end);
+        extraTypes.push(extraType);
+    }
+    return typeString.replace(/\@/g, '');
+}
+
+
 function formatParams(comment){
-    const {params} = comment;
+    const {params, returns} = comment;
     const paramsArray = [];
     for (const key in params) {
         const param = params[key];
-        paramsArray.push(`${key}: ${param.type}`)
+        paramsArray.push(`${key}: ${getType(param.type)}`)
     }
-    return paramsArray.length > 0 ? `(${paramsArray.join(', ')}) => {}` : '() => {}';
+    return `(${paramsArray.join(', ')}) => ${returns && returns.type ? getType(returns.type) : 'void'}`;
+}
+
+function formatDesc(comment){
+    const {params, desc, returns} = comment;
+    const paramsDescArray = [];
+    for (const key in params) {
+        const param = params[key];
+        paramsDescArray.push(`${key} ${param.desc}`)
+    }
+    return desc ? `\t\t/** ${desc} ${paramsDescArray.length > 0 ? `${lineBreak}\t\t * @param ${paramsDescArray.join(`${lineBreak}\t\t * @param `)}` : ''}${lineBreak}\t\t * @returns ${returns ? returns.desc : ''}${lineBreak}\t\t */${lineBreak}` : '';
 }
 
 // 读取services文件夹下的文件
@@ -31,12 +55,12 @@ let services = fs.readdirSync(dirPath).map((fileName) => {
             const type = typeof property;
             const comment = _comments[key]
             if(key !== 'constructor' && type === 'function' && comment){                
-                info.propertys.push(`${comment.desc ? `\t\t/** ${comment.desc} */\r\n` : ''}\t\t${key}: ${formatParams(comment)}`);
+                info.propertys.push(`${formatDesc(comment)}\t\t${key}: ${formatParams(comment)}`);
             }else if(key !== 'constructor' && type === 'function'){
                 info.propertys.push(`\t\t${key}: Function`)
             }
         })
-        info.propertys = info.propertys.join(',\r\n');
+        info.propertys = info.propertys.join(`,${lineBreak}${lineBreak}`);
         return info;
     }
 })
@@ -46,10 +70,16 @@ services = services.filter((item) => {return item !== undefined})
 const data = [];
 
 services.forEach((info) => {
-    data.push(`${info.desc ? `\t/** ${info.desc} */\r\n` : ''}\t${info.name}: {\r\n${info.propertys}\r\n\t}`);
+    data.push(`${info.desc ? `\t/** ${info.desc} */${lineBreak}` : ''}\t${info.name}: {${lineBreak}${lineBreak}${info.propertys}${lineBreak}\t}`);
 })
+
+extraTypes = [...(new Set(extraTypes))];
+
+function importExtraTypes(importPath = '', extraTypes){
+    return `import {${extraTypes.join(', ')}} from '${importPath}'`
+}
 
 fs.writeFileSync(
     path.resolve(__dirname, '../type/service.js'), 
-    `export type ServiceType = {\r\n${data.join(',\r\n')}\r\n}`
+    `${extraTypes.length > 0 ? `${importExtraTypes('./index.js', extraTypes)}${lineBreak}${lineBreak}` : ''}export type ServiceType = {${lineBreak}${lineBreak}${data.join(`,${lineBreak}${lineBreak}`)}${lineBreak}}`
 )
