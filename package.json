@@ -5,7 +5,9 @@
   "main": "app.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=dev nodemon --ignore node_modules --ignore src/type/ --ext node,js,jade --exec  babel-node src/app.js",
-    "pro": "cross-env NODE_ENV=production nodemon --ignore node_modules --ext node,js,jade --exec babel-node src/app.js",
+    "pro": "pm2 start ecosystem.config.js",
+    "stop": "pm2 delete ecosystem.config.js",
+    "build": "babel src --out-dir dist",
     "eslint": "eslint **/*.js",
     "db": "babel-node src/db/sync.js"
   },

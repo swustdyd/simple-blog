@@ -8,14 +8,14 @@ import compression from 'compression'
 import projectInit from './projectInit'
 import BaseConfig from '../configs'
 // import cross from './utils/cross'
-// import exceptionHandle from './utils/exceptionHandle'
+import exceptionHandle from './utils/exceptionHandle'
 import {db} from './db'
 import logger from './utils/logger'
 // import pageHandle from './utils/pageHandle'
 
 db.authenticate()
     .catch((err) => {
-        logger.error(err);
+        logger.error('数据库初始化错误', err);
     });
 
 const isDev = process.env.NODE_ENV !== 'production';
@@ -68,7 +68,7 @@ fs.readdirSync(dirPath).forEach((fileName) => {
 
 projectInit(app)
 
-// app.use(exceptionHandle);
+app.use(exceptionHandle);
 
 app.listen(serverPort, function () {
     console.log(`Simple project(${process.env.NODE_ENV}) is running on port ${serverPort}`);

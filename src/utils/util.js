@@ -69,6 +69,7 @@ export function getAllRoutes(){
                 }
                 allRoutes.push({
                     ...route,
+                    path: controller._basePath + route.path,
                     middleware: names.length > 0 ? names : undefined,
                     params
                 });

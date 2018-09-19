@@ -40,7 +40,13 @@ controllers.forEach((controller) => {
         controller._routes.forEach((item) => {
             const url = controller._basePath + item.path;
             item.middleware = item.middleware || [];
-            router[item.method](url, ...item.middleware, controller[item.functionName].bind(controller));
+            router[item.method](url, ...item.middleware, (req, res, next) => {
+                const instance = new controller.__proto__.constructor();
+                instance.ctx = {
+                    services: req.services
+                };
+                instance[item.functionName].call(instance, req, res, next);
+            })
         });
     }
 })

@@ -1,4 +1,4 @@
-import {exceptionCode} from '../middlewares/exceptionHandle'
+import {exceptionCode} from '../utils/exceptionHandle'
 
 export default class BusinessException{
     constructor(message: string, errorCode: number = exceptionCode.DEFAULT, extra){
