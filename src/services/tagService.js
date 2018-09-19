@@ -2,12 +2,13 @@ import {TagEntity} from '../models/tag'
 import { Tag } from '../type';
 import {service} from '../utils/decorator'
 import BusinessException from '../models/businessException'
+import BaseService from './baseService'
 
 // @service('tagService')
-export default class TagService {
+export default class TagService extends BaseService{
 
     constructor(ctx){
-        this.ctx = ctx;
+        super(ctx);
         this.tagEntity = new TagEntity(ctx);
     }
 

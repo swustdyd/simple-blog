@@ -6,12 +6,13 @@ import BusinessException from '../models/businessException'
 import {PageResult} from '../type'
 import {db} from '../db'
 import {QueryTypes} from '../db/sequelize'
+import BaseService from './baseService'
 
 @service('menuService', '菜单service')
-export default class RoleService {
+export default class MenuService extends BaseService{
 
     constructor(ctx){
-        this.ctx = ctx;
+        super(ctx);
         this.menuEntity = new MenuEntity(ctx);
     }
     @serviceComment({

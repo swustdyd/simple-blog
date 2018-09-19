@@ -5,12 +5,13 @@ import BusinessException from '../models/businessException'
 import {md5Password} from '../utils/util'
 import {PASSWORD_MD5_KEY} from '../utils/setting'
 import {PageResult} from '../type'
+import BaseService from './baseService'
 
 @service('roleService')
-export default class RoleService {
+export default class RoleService extends BaseService{
 
     constructor(ctx){
-        this.ctx = ctx;
+        super(ctx);
         this.roleEntity = new RoleEntity(ctx);
     }
 

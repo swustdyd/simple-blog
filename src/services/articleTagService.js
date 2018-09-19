@@ -3,12 +3,13 @@ import {service} from '../utils/decorator'
 import { ArticleTag } from '../type';
 import BusinessException from '../models/businessException'
 import {db} from '../db'
+import BaseService from './baseService'
 
 // @service('articleTagService')
-export default class ArticelTagService {
+export default class ArticelTagService extends BaseService{
 
     constructor(ctx){
-        this.ctx = ctx;
+        super(ctx);
         this.articleTagEntity = new ArticleTagEntity(ctx);
     }
 

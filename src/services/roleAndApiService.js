@@ -3,12 +3,13 @@ import {service} from '../utils/decorator'
 import BusinessException from '../models/businessException'
 import {QueryTypes} from '../db/sequelize';
 import {db} from '../db'
+import BaseService from './baseService'
 
 @service('roleAndApiService')
-export default class TagService {
+export default class RoleAndApiService extends BaseService{
 
     constructor(ctx){
-        this.ctx = ctx;
+        super(ctx);
         this.roleAndApisEntity = new RoleAndApisEntity(ctx);
     }
 

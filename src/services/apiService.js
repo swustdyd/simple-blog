@@ -5,12 +5,13 @@ import BusinessException from '../models/businessException'
 import {PageResult} from '../type'
 import {db} from '../db'
 import {QueryTypes} from '../db/sequelize'
+import BaseService from './baseService'
 
 @service('apiService', '后台Api服务')
-export default class ApiService {
+export default class ApiService extends BaseService{
 
     constructor(ctx){
-        this.ctx = ctx;
+        super(ctx)
         this.apiEntity = new ApiEntity(ctx);
     }
 

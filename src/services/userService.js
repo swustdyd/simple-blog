@@ -4,12 +4,13 @@ import {service} from '../utils/decorator'
 import BusinessException from '../models/businessException'
 import {md5Password} from '../utils/util'
 import {PASSWORD_MD5_KEY} from '../utils/setting'
+import BaseService from './baseService'
 
 @service('userService')
-export default class UserService {
+export default class UserService extends BaseService{
 
     constructor(ctx){
-        this.ctx = ctx;
+        super(ctx);
         this.userEntity = new UserEntity(ctx);
     }
 

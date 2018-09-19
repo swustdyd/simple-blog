@@ -7,10 +7,10 @@ import {db} from '../db'
 import logger from '../utils/logger'
 
 // @service('articleService')
-export default class ArticleService{
+export default class ArticleService extends BaseService{
     
     constructor(ctx){
-        this.ctx = ctx;
+        super(ctx);
         this.articleEntity = new ArticleEntity(ctx);
 
     }

@@ -202,3 +202,13 @@ export type SearchOptions = {
     limit: number,
     offset: number
 }
+
+export type Transaction = {
+    startTransaction: () => Promise<Object>,
+
+    getTransaction: () => Object,
+
+    commit: () => Promise<void>,
+
+    rollback: () => Promise<void>
+}

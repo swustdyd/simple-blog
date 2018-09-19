@@ -18,11 +18,14 @@ fs.readdirSync(dirPath).forEach((fileName) => {
 
 export default (req, res, next) => {
     const services = {};
-    req.transaction = new Transaction();
+    const ctx = {};
+    ctx.transaction = new Transaction();
     serviceArray.forEach((service) => {
-        const instance = new service(req);
+        const instance = new service(ctx);
         services[service._name] = instance;
     });
     req.services = services;
+    ctx.services = services;
+    ctx.req = req;
     next();
 };
