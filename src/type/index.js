@@ -1,3 +1,7 @@
+import { ServiceType } from './service';
+import {ExpressResponse} from './expressReponse'
+import {ExpressRequest} from './expressRequest'
+
 /**
  * 文章的数据格式
  */
@@ -211,4 +215,16 @@ export type Transaction = {
     commit: () => Promise<void>,
 
     rollback: () => Promise<void>
+}
+
+export type ControllerContext = {
+    services: ServiceType,
+    res: ExpressResponse,
+    req: ExpressRequest
+}
+
+export type ServiceContext = {
+    services: ServiceType,
+    transaction: Transaction,
+    req: ExpressRequest
 }

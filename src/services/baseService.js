@@ -1,16 +1,8 @@
 import {db} from '../db'
-import { Transaction } from '../type';
-import { ServiceType } from '../type/service'
+import { ServiceContext } from '../type';
 
 export default class BaseService{
-    constructor(ctx: {
-        services: ServiceType,
-        transaction: Transaction
-    }){
-        this.ctx = {
-            services: ctx.services,
-            req: ctx.req,
-            transaction: ctx.transaction
-        }
+    constructor(ctx: ServiceContext){
+        this.ctx = ctx;
     }
 }

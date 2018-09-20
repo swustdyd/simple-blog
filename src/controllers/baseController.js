@@ -1,14 +1,11 @@
-import {ServiceType} from '../type/service'
+import {ControllerContext} from '../type'
 
 export default class BaseController{
     constructor(){
-
-        const services: ServiceType = '';
+        const context: ControllerContext = undefined;
         /**
          * 上下文
          */
-        this.ctx = {
-            services
-        }
+        this.ctx = context;
     }
 }
