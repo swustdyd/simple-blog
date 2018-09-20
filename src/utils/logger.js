@@ -5,7 +5,7 @@ log4js.configure({
     appenders: [
         {
             type: 'dateFile',
-            filename: path.resolve(__dirname, '../../../logs/error'),
+            filename: path.resolve(__dirname, '../../logs/error'),
             alwaysIncludePattern: true,
             pattern: '-yyyy-MM-dd.log',
             category: 'PRO_LOGGER'
@@ -16,8 +16,8 @@ log4js.configure({
         }
     ],
     levels: {
-        error: 'ERROR',
-        console: 'TRACE'
+        PRO_LOGGER: log4js.levels.DEBUG,
+        DEV_LOGGER: log4js.levels.ALL
     }
 });
 

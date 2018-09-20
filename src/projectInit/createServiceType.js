@@ -79,7 +79,16 @@ function importExtraTypes(importPath = '', extraTypes){
     return `import {${extraTypes.join(', ')}} from '${importPath}'`
 }
 
-fs.writeFileSync(
-    path.resolve(__dirname, '../type/service.js'), 
-    `${extraTypes.length > 0 ? `${importExtraTypes('./index.js', extraTypes)}${lineBreak}${lineBreak}` : ''}export type ServiceType = {${lineBreak}${lineBreak}${data.join(`,${lineBreak}${lineBreak}`)}${lineBreak}}`
-)
+const isDev = process.env.NODE_ENV !== 'production'; 
+
+if(isDev){
+    fs.writeFileSync(
+        path.resolve(__dirname, '../type/service.js'), 
+        `${extraTypes.length > 0 ? `${importExtraTypes('./index.js', extraTypes)}${lineBreak}${lineBreak}` : ''}export type ServiceType = {${lineBreak}${lineBreak}${data.join(`,${lineBreak}${lineBreak}`)}${lineBreak}}`
+    )
+}else{
+    fs.writeFileSync(
+        path.resolve(__dirname, '../type/service.js'), 
+        '// do not create type file at production'
+    )
+}

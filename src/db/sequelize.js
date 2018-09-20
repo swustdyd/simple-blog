@@ -1,4 +1,5 @@
 import Sequelize from 'sequelize'
+import logger from '../utils/logger'
 
 const {Op} = Sequelize;
 
@@ -16,7 +17,7 @@ export const sequelize = new Sequelize('blog', 'root', 'DD89757000', {
     },
     timezone: '+08:00',
     logging: (sqlString) => {
-        console.log(sqlString);
+        logger.debug(sqlString);
     },
     define: {        
         // 禁用修改表名; 默认情况下，sequelize将自动将所有传递的模型名称（define的第一个参数）转换为复数。 如果你不想这样，请设置以下内容

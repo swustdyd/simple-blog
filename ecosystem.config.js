@@ -7,7 +7,7 @@ module.exports = {
             'NODE_ENV': 'production'
         },
         // eslint-disable-next-line
-        ignore_watch: ['[\/\\]\./', 'node_modules'],
+        ignore_watch: ['[\/\\]\./', 'node_modules', 'dist/type'],
         // eslint-disable-next-line
         max_memory_restart: '250M',
         instances: 'max',

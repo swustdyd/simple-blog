@@ -1,17 +1,19 @@
 import morgan from 'morgan'
 import express from 'express'
+import rfs from 'rotating-file-stream';
 import path from 'path'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import fs from 'fs'
+import moment from 'moment'
 import compression from 'compression'
 import projectInit from './projectInit'
 import BaseConfig from '../configs'
-// import cross from './utils/cross'
 import exceptionHandle from './utils/exceptionHandle'
 import {db} from './db'
 import logger from './utils/logger'
-// import pageHandle from './utils/pageHandle'
+
+logger.info('Project begin to start, please waite...');
 
 db.authenticate()
     .catch((err) => {
@@ -39,11 +41,10 @@ if(isDev){
                 return 'access.log';
             }else{
                 return `access-${moment(time).format('YYYY-MM-DD')}-${index}.log`
-            }
-            
+            }            
         }, {
             interval: '1d', // rotate daily
-            path: path.join(BaseConfig.root, 'logs')
+            path: path.join(BaseConfig.root, './logs')
         })
     }));
 }
@@ -57,20 +58,20 @@ const dirPath = path.resolve(__dirname, './middlewares');
 
 fs.readdirSync(dirPath).forEach((fileName) => {
     const middleware = require(path.join(dirPath, fileName)).default;
-    if(middleware){      
+    if(middleware && fileName !== 'authority.js'){      
         app.use(middleware);
     }
 })
-
-// app.use(cross);
-
-// app.use(pageHandle)
 
 projectInit(app)
 
 app.use(exceptionHandle);
 
 app.listen(serverPort, function () {
-    console.log(`Simple project(${process.env.NODE_ENV}) is running on port ${serverPort}`);
+    logger.info(`Project(${process.env.NODE_ENV}) is running on port ${serverPort}`);
 });
+
+process.on('uncaughtException', (err) => {
+    logger.error(err);
+})
 
