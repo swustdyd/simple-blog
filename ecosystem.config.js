@@ -16,6 +16,6 @@ module.exports = {
         // eslint-disable-next-line
         min_uptime: '60s',
         // eslint-disable-next-line
-        max_restarts: 1
+        max_restarts: 10
     }]
 }
