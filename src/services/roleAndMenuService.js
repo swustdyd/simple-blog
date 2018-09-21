@@ -105,11 +105,10 @@ export default class RoleAndMenuService extends BaseService{
         }
     })
     async deleteRoleAndMenusByRoleId(roleId){
-        await db.query('delete from roleandmenus where roleId = :roleId', {
+        await this.roleAndMenusEntity.query('delete from roleandmenus where roleId = :roleId', {
             replacements: {
                 roleId
-            },
-            transaction: this.ctx.transaction.getTransaction()
+            }
         })
     }
 }

@@ -81,7 +81,7 @@ function importExtraTypes(importPath = '', extraTypes){
 }
 
 const isDev = process.env.NODE_ENV !== 'production'; 
-logger.info(`env: ${process.env.NODE_ENV}`);
+
 if(isDev){
     fs.writeFileSync(
         path.resolve(__dirname, '../type/service.js'), 

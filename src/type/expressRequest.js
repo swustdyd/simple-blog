@@ -72,15 +72,18 @@ export type ExpressRequest = {
 	 * allowing you to rewrite req.url freely for internal routing purposes. For example,
 	 * the “mounting” feature of app.use() will rewrite req.url to strip the mount point.
      * @example
+     * ```js
      * // GET /search?q=something
         req.originalUrl
         // => "/search?q=something"
-        app.use('/admin', function(req, res, next) {  // GET 'http://www.example.com/admin/new'
-        console.log(req.originalUrl); // '/admin/new'
-        console.log(req.baseUrl); // '/admin'
-        console.log(req.path); // '/new'
-        next();
+        app.use('/admin', function(req, res, next) {  
+            // GET 'http://www.example.com/admin/new'
+            console.log(req.originalUrl); // '/admin/new'
+            console.log(req.baseUrl); // '/admin'
+            console.log(req.path); // '/new'
+            next();
         });
+     * ```
 	 */
 	originalUrl: string,
 	/**
@@ -126,20 +129,25 @@ export type ExpressRequest = {
 	/**
 	 * Contains the currently-matched route, a string.  For example:
      * @example
-     * app.get('/user/:id?', function userIdHandler(req, res) {
-        console.log(req.route);
-        res.send('GET');
+     * ```js
+     *  app.get('/user/:id?', function userIdHandler(req, res) {
+            console.log(req.route);
+            res.send('GET');
         });
-        // { path: '/user/:id?',
-        //     stack:
-        //     [ { handle: [Function: userIdHandler],
-        //         name: 'userIdHandler',
-        //         params: undefined,
-        //         path: undefined,
-        //         keys: [],
-        //         regexp: /^\/?$/i,
-        //         method: 'get' } ],
-        //     methods: { get: true } }
+        // result of req.route
+        { 
+            path: '/user/:id?',
+            stack:
+            [ { handle: [Function: userIdHandler],
+                name: 'userIdHandler',
+                params: undefined,
+                path: undefined,
+                keys: [],
+                regexp: /^\/?$/i,
+                method: 'get' } ],
+            methods: { get: true } 
+        }
+     * ```
 	 */
 	route: Object,
 	/**
@@ -279,16 +287,17 @@ export type ExpressRequest = {
      * The size parameter is the maximum size of the resource.
      * The options parameter is an object that can have the following properties.
      * @example
-     * // parse header from request
+     * ```js
+     *  // parse header from request
         var range = req.range(1000)
-
         // the type of the range
         if (range.type === 'bytes') {
-        // the ranges
-        range.forEach(function (r) {
-            // do something with r.start and r.end
-        })
+            // the ranges
+            range.forEach(function (r) {
+                // do something with r.start and r.end
+            })
         }
+     * ```
 	 */
 	range: Function
 }

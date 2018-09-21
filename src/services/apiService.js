@@ -50,15 +50,13 @@ export default class ApiService extends BaseService{
         joinSql = joinSql.join(' ');
         whereSql = `where 1=1 ${whereSql.length > 0 ? `and ${whereSql.join(' and ')}` : ''}`
         const datas = await Promise.all([
-            db.query(`${selectSql} ${joinSql} ${whereSql} ${pageSql}`, {
+            this.apiEntity.query(`${selectSql} ${joinSql} ${whereSql} ${pageSql}`, {
                 type: QueryTypes.SELECT,
-                replacements,
-                transaction: this.ctx.transaction.getTransaction()
+                replacements
             }),
-            db.query(`select count(*) as total from api a ${joinSql} ${whereSql}`, {
+            this.apiEntity.query(`select count(*) as total from api a ${joinSql} ${whereSql}`, {
                 type: QueryTypes.SELECT,
-                replacements,
-                transaction: this.ctx.transaction.getTransaction()
+                replacements
             })
         ])
         return {

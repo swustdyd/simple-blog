@@ -105,11 +105,10 @@ export default class RoleAndApiService extends BaseService{
         }
     })
     async deleteRoleAndApiByRoleId(roleId){
-        await db.query('delete from roleandapis where roleId = :roleId', {
+        await this.roleAndApisEntity.query('delete from roleandapis where roleId = :roleId', {
             replacements: {
                 roleId
-            },
-            transaction: this.ctx.transaction.getTransaction()
+            }
         })
     }
 }

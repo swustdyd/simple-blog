@@ -53,15 +53,13 @@ export default class MenuService extends BaseService{
         const datas = await Promise.all([
             // this.menuEntity.findAll(options),
             // this.menuEntity.count(options)
-            db.query(`${selectSql} ${joinSql} ${whereSql} ${pageSql}`, {
+            this.menuEntity.query(`${selectSql} ${joinSql} ${whereSql} ${pageSql}`, {
                 type: QueryTypes.SELECT,
-                replacements,
-                transaction: this.ctx.transaction.getTransaction()
+                replacements
             }),
-            db.query(`select count(*) as total from menu m ${joinSql} ${whereSql}`, {
+            this.menuEntity.query(`select count(*) as total from menu m ${joinSql} ${whereSql}`, {
                 type: QueryTypes.SELECT,
-                replacements,
-                transaction: this.ctx.transaction.getTransaction()
+                replacements
             })
         ])
         return {

@@ -206,8 +206,9 @@ export type SearchOptions = {
      * 搜索条件
      * @see http://docs.sequelizejs.com/class/lib/model.js~Model.html#static-method-findAll for detail
      * @example
-    const {gt, lte, ne, in: opIn} = Sequelize.Op;
-    const where = {
+     * ```js
+     *  const {gt, lte, ne, in: opIn} = Sequelize.Op;
+        const where = {
             attr0: '123',
             attr1: {
                 [gt]: 50
@@ -222,6 +223,7 @@ export type SearchOptions = {
                 [ne]: 5
             }
         }
+     * ```
      */
     where: {},
     /**
@@ -252,6 +254,7 @@ export type ControllerContext = {
      * 调用将执行下一个中间件，否则将挂起该次请求
      * @param err 传入该参数，将调用 (err, req, res, next) => void 这一类型的中间件
      * @example
+     * ```js
         app.get('/test', (req, res, next) => {
             try {
                 const result = await req.services.apiService.searchApis({
@@ -265,6 +268,7 @@ export type ControllerContext = {
                 next(error);
             }
         })
+     * ```
      */
     next: (err?: any) => void
 }

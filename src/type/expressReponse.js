@@ -5,26 +5,33 @@ export type ExpressResponse = {
 	app: Object,
 	/**
 	 * Boolean property that indicates if the app sent HTTP headers for the response.
+     * 
      * @example
-     * app.get('/', function (req, res) {
-     * console.log(res.headersSent); // false
-     * res.send('OK');
-     * console.log(res.headersSent); // true
-     * });
+     * ```js
+     *  app.get('/', function (req, res) {
+            console.log(res.headersSent); // false
+            res.send('OK');
+            console.log(res.headersSent); // true
+        });
+     * ```
 	 */
 	headersSent: Boolean,
 	/**
 	 * An object that contains response local variables scoped to the request, and therefore available only to
 	 * the view(s) rendered during that request / response cycle (if any). Otherwise,
 	 * this property is identical to app.locals.
+     * 
      * This property is useful for exposing request-level information such as the request path name, 
      * authenticated user, user settings, and so on.
+     * 
      * @example
-     * app.use(function(req, res, next){
-        res.locals.user = req.user;
-        res.locals.authenticated = ! req.user.anonymous;
-        next();
+     * ```js
+     *  app.use(function(req, res, next){
+            res.locals.user = req.user;
+            res.locals.authenticated = ! req.user.anonymous;
+            next();
         });
+     * ```
 	 */
 	locals: Object,
 	/**
@@ -71,19 +78,20 @@ export type ExpressResponse = {
 	 * Transfers the file at path as an “attachment”. Typically, browsers will prompt the user for download.
 	 * By default, the Content-Disposition header “filename=” parameter is path (this typically appears in the browser dialog).
 	 * Override this default with the filename parameter.
+     * 
      * @example
-     * res.download('/report-12345.pdf');
-
+     * ```js
+     *  res.download('/report-12345.pdf');
         res.download('/report-12345.pdf', 'report.pdf');
-
         res.download('/report-12345.pdf', 'report.pdf', function(err){
-        if (err) {
-            // Handle error, but keep in mind the response may be partially-sent
-            // so check res.headersSent
-        } else {
-            // decrement a download credit, etc.
-        }
+            if (err) {
+                // Handle error, but keep in mind the response may be partially-sent
+                // so check res.headersSent
+            } else {
+                // decrement a download credit, etc.
+            }
         });
+     * ```
 	 */
 	download: (path: string, filename?: string, options?: {}, callback?: (err: Error) => void) => void,
 	/**
@@ -100,24 +108,26 @@ export type ExpressResponse = {
 	 * types ordered by their quality values. If the header is not specified, the first callback is invoked.
 	 * When no match is found, the server responds with 406 “Not Acceptable”, or invokes the default callback.
      * @example
-     * res.format({
-        'text/plain': function(){
-            res.send('hey');
-        },
+     * ```js
+     *  res.format({
+            'text/plain': function(){
+                res.send('hey');
+            },
 
-        'text/html': function(){
-            res.send('<p>hey</p>');
-        },
+            'text/html': function(){
+                res.send('<p>hey</p>');
+            },
 
-        'application/json': function(){
-            res.send({ message: 'hey' });
-        },
+            'application/json': function(){
+                res.send({ message: 'hey' });
+            },
 
-        'default': function() {
-            // log the request and respond with 406
-            res.status(406).send('Not Acceptable');
-        }
+            'default': function() {
+                // log the request and respond with 406
+                res.status(406).send('Not Acceptable');
+            }
         });
+     * ```
 	 */
 	format: (object: {}) => void,
 	/**
@@ -157,14 +167,18 @@ export type ExpressResponse = {
 	/**
 	 * Joins the links provided as properties of the parameter to populate the response’s
 	 * Link HTTP header field.
+     * 
      * @example
-     * res.links({
-        next: 'http://api.example.com/users?page=2',
-        last: 'http://api.example.com/users?page=5'
+     * ```js
+     *  res.links({
+            next: 'http://api.example.com/users?page=2',
+            last: 'http://api.example.com/users?page=5'
         });
-     * @result Yields the following results:
-     * Link: <http://api.example.com/users?page=2>; rel="next",
-             <http://api.example.com/users?page=5>; rel="last"}
+       // Yields the following results:
+        Link:   
+            <http://api.example.com/users?page=2>; rel="next",
+            <http://api.example.com/users?page=5>; rel="last"
+     * ```
 	 */
 	links: (links: {}) => void,
 	/**
@@ -193,19 +207,21 @@ export type ExpressResponse = {
      * @param locals an object whose properties define local variables for the view.
      * @param callback a callback function. If provided, the method returns both the possible error and rendered string, 
      * but does not perform an automated response. When an error occurs, the method invokes next(err) internally.
+     * 
      * @example
-     * // send the rendered view to the client
+     * ```js
+     *  // send the rendered view to the client
         res.render('index');
-
-        // if a callback is specified, the rendered HTML string has to be sent explicitly
+        // if a callback is specified, 
+        // the rendered HTML string has to be sent explicitly
         res.render('index', function(err, html) {
-        res.send(html);
+            res.send(html);
         });
-
         // pass a local variable to the view
-        res.render('user', { name: 'Tobi' }, function(err, html) {
-        // ...
+        res.render('user', { name: 'Tobi' }, (err, html) => {
+            // ...
         });
+     * ```
 	 */
 	render: (view: string, locals?: {}, callback:? (err: Error, html: string) => void) => void,
 	/**
@@ -224,28 +240,28 @@ export type ExpressResponse = {
 	 * based on the filename’s extension. Unless the root option is set in
 	 * the options object, path must be an absolute path to the file.
      * @see http://www.expressjs.com.cn/4x/api.html#res.sendFile for detail
+     * 
      * @example 
-     * app.get('/file/:name', function (req, res, next) {
-
-        var options = {
-            root: __dirname + '/public/',
-            dotfiles: 'deny',
-            headers: {
-                'x-timestamp': Date.now(),
-                'x-sent': true
-            }
-        };
-
-        var fileName = req.params.name;
-        res.sendFile(fileName, options, function (err) {
-            if (err) {
-            next(err);
-            } else {
-            console.log('Sent:', fileName);
-            }
+     * ```js
+     *  app.get('/file/:name', function (req, res, next) {
+            var options = {
+                root: __dirname + '/public/',
+                dotfiles: 'deny',
+                headers: {
+                    'x-timestamp': Date.now(),
+                    'x-sent': true
+                }
+            };
+            var fileName = req.params.name;
+            res.sendFile(fileName, options, function (err) {
+                if (err) {
+                    next(err);
+                } else {
+                    console.log('Sent:', fileName);
+                }
+            });
         });
-
-        });
+     * ```
 	 */
 	sendFile: (path: string, options?: {}, callback?: (err: Error) => void) => void,
 	/**
@@ -261,12 +277,14 @@ export type ExpressResponse = {
 	 * Sets the response’s HTTP header field to value.
 	 * To set multiple fields at once, pass an object as the parameter.
      * @example
-     * res.set('Content-Type', 'text/plain');
+     * ```js
+     *  res.set('Content-Type', 'text/plain');
         res.set({
-        'Content-Type': 'text/plain',
-        'Content-Length': '123',
-        'ETag': '12345'
+            'Content-Type': 'text/plain',
+            'Content-Length': '123',
+            'ETag': '12345'
         });
+     * ```
 	 */
 	set: (field: string, value?: string) => void,
 	/**
