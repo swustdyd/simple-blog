@@ -16,7 +16,7 @@ export default class ApiService extends BaseService{
     }
 
     @serviceComment({
-        desc: '搜索后台Api',
+        desc: '搜索后台Api, 目前支持的搜索条件为 name：api名，roleId：角色名称，path：api的访问路径',
         params: {
             options: {
                 desc: '搜索条件',
@@ -75,13 +75,14 @@ export default class ApiService extends BaseService{
                 type: 'number'
             }
         },
-        return: {
-            type: 'Promise<ApiEntity>'
+        returns: {
+            desc: 'api的数据库实体数据',
+            type: 'Promise<Object>'
         }
     })
     async getApiById(id: number){
         if(!id){
-            throw new Error('菜单id不能为空');
+            throw new Error('api的id不能为空');
         }
         return await this.apiEntity.findOne({
             where: {
@@ -90,6 +91,19 @@ export default class ApiService extends BaseService{
         });
     }
 
+    @serviceComment({
+        desc: '保存或者修改api信息，有id则更新，无id则新增',
+        params: {
+            api: {
+                desc: 'api的数据',
+                type: 'Object'
+            }
+        },
+        returns: {
+            desc: '更新或者修改后的api数据',
+            type: 'Promise<Object>'
+        }
+    })
     async saveOrUpdateApi(api){
         //修改
         if(api.id){
@@ -111,6 +125,19 @@ export default class ApiService extends BaseService{
         return api;
     }
 
+    @serviceComment({
+        desc: '批量保存或者修改api信息，有id则更新，无id则新增',
+        params: {
+            apis: {
+                desc: 'api数组',
+                type: '[Object]'
+            }
+        },
+        returns: {
+            desc: '更新或者修改后的api数据',
+            type: 'Promise<[Object]>'
+        }
+    })
     async saveOrUpdateApis(apis){
         const promiseList = [];
         apis.forEach((api) => {

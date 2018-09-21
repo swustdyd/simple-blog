@@ -1,5 +1,5 @@
 import {RoleAndApisEntity} from '../models/roleAndApis'
-import {service} from '../utils/decorator'
+import {service, serviceComment} from '../utils/decorator'
 import BusinessException from '../models/businessException'
 import {QueryTypes} from '../db/sequelize';
 import {db} from '../db'
@@ -13,6 +13,19 @@ export default class RoleAndApiService extends BaseService{
         this.roleAndApisEntity = new RoleAndApisEntity(ctx);
     }
 
+    @serviceComment({
+        desc: '根据id获取RoleAndApi',
+        params: {
+            id: {
+                desc: 'RoleAndApi的id',
+                type: 'number'
+            }
+        },
+        returns: {
+            desc: 'RoleAndApi数据',
+            type: 'Promise<Object>'
+        }
+    })
     async getRoleAndApiById(id: number){
         if(!id){
             throw new Error('roleAndApi的id不能为空');
@@ -24,6 +37,19 @@ export default class RoleAndApiService extends BaseService{
         });
     }
 
+    @serviceComment({
+        desc: '保存或者修改RoleAndApi，有id则更新，无id则新增',
+        params: {
+            roleAndApi: {
+                desc: 'RoleAndApi的数据',
+                type: 'Object'
+            }
+        },
+        returns: {
+            desc: '保存后的RoleAndApi数据',
+            type: 'Promise<Object>'
+        }
+    })
     async saveOrUpdateRoleAndApi(roleAndApi){
         //修改
         if(roleAndApi.id){
@@ -45,6 +71,19 @@ export default class RoleAndApiService extends BaseService{
         return roleAndApi;
     }
 
+    @serviceComment({
+        desc: '批量保存或者修改RoleAndApi，有id则更新，无id则新增',
+        params: {
+            roleAndApis: {
+                desc: 'RoleAndApi的数据',
+                type: '[Object]'
+            }
+        },
+        returns: {
+            desc: '保存后的RoleAndApi数据',
+            type: 'Promise<Object>'
+        }
+    })
     async saveOrUpdateRoleAndApis(roleAndApis){
         const promiseList = [];
         roleAndApis.forEach((roleAndApi) => {
@@ -53,6 +92,18 @@ export default class RoleAndApiService extends BaseService{
         return await Promise.all(promiseList);
     }    
 
+    @serviceComment({
+        desc: '根据角色id删除RoleAndApi',
+        params: {
+            roleId: {
+                desc: '角色id',
+                type: 'number'
+            }
+        },
+        returns: {
+            type: 'Promise<void>'
+        }
+    })
     async deleteRoleAndApiByRoleId(roleId){
         await db.query('delete from roleandapis where roleId = :roleId', {
             replacements: {

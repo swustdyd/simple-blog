@@ -3,6 +3,7 @@ import BaseController from './baseController'
 import ApiResponse from '../models/apiResponse'
 import {OP} from '../db'
 import {Authority} from '../middlewares/authority'
+import { SearchOptions } from '../type';
 
 const {like, eq} = OP;
 
@@ -39,10 +40,11 @@ export default class MenuController extends BaseController{
             }
         }
     })
-    async searchMenus(req, res, next){
+    async searchMenus(){
+        const {req, res, next, services} = this.ctx;
         try {
             const {offset, pageSize, name, parentMenu, roleId} = req.query;
-            const option = {
+            const option: SearchOptions = {
                 where: {
                     name,
                     parentMenu,
@@ -51,7 +53,7 @@ export default class MenuController extends BaseController{
                 limit: pageSize,
                 offset
             }
-            const result = await req.services.menuService.searchMenus(option);
+            const result = await services.menuService.searchMenus(option);
             const apiRes = new ApiResponse();
             apiRes.setResult(result);
             res.json(apiRes)
@@ -66,9 +68,10 @@ export default class MenuController extends BaseController{
         middleware: [Authority],
         description: '获取所有的菜单信息'
     })
-    async getAllMenus(req, res, next){
+    async getAllMenus(){
+        const {req, res, next, services} = this.ctx;
         try {
-            const result = await req.services.menuService.searchMenus({
+            const result = await services.menuService.searchMenus({
                 limit: Number.MAX_SAFE_INTEGER,
                 offset: 0
             });
@@ -99,7 +102,8 @@ export default class MenuController extends BaseController{
             }
         }
     })
-    async addMenu(req, res, next){
+    async addMenu(){
+        const {req, res, next, services} = this.ctx;
         try {
             const { menu, siblingMenus} = req.body;
             const {user:{id}} = req.token;
@@ -108,8 +112,8 @@ export default class MenuController extends BaseController{
             }else{                
                 menu.creater = menu.editer = id;
             }
-            await req.services.menuService.saveOrUpdateMenus(siblingMenus);
-            await req.services.menuService.saveOrUpdateMenu(menu);
+            await services.menuService.saveOrUpdateMenus(siblingMenus);
+            await services.menuService.saveOrUpdateMenu(menu);
             const apiRes = new ApiResponse();
             apiRes.setMessage('保存成功')
             res.json(apiRes)            

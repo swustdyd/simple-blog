@@ -43,7 +43,10 @@ controllers.forEach((controller) => {
             router[item.method](url, ...item.middleware, (req, res, next) => {
                 const instance = new controller.__proto__.constructor();
                 instance.ctx = {
-                    services: req.services
+                    services: req.services,
+                    req,
+                    res,
+                    next
                 };
                 instance[item.functionName].call(instance, req, res, next);
             })

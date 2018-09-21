@@ -15,6 +15,19 @@ export default class RoleService extends BaseService{
         this.roleEntity = new RoleEntity(ctx);
     }
 
+    @serviceComment({
+        desc: '搜索角色信息',
+        params: {
+            options: {
+                desc: '搜索条件',
+                type: '@SearchOptions@'
+            }
+        },
+        returns: {
+            desc: '搜索的结果',
+            type: 'Promise<@PageResult@>'
+        }
+    })
     async searchRoles(options: SearchOptions): Promise<PageResult>{
         const datas = await Promise.all([
             this.roleEntity.findAll(options), 
@@ -26,6 +39,19 @@ export default class RoleService extends BaseService{
         }
     }
 
+    @serviceComment({
+        desc: '根据id获取角色信息',
+        params: {
+            id: {
+                desc: '角色id',
+                type: 'number'
+            }
+        },
+        returns: {
+            desc: '角色数据',
+            type: 'Promise<Object>'
+        }
+    })
     async getRoleById(id: number){
         if(!id){
             throw new Error('角色id不能为空');

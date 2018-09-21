@@ -202,8 +202,35 @@ export type SolrOptionsType ={
 }
 
 export type SearchOptions = {
+    /**
+     * 搜索条件
+     * @see http://docs.sequelizejs.com/class/lib/model.js~Model.html#static-method-findAll for detail
+     * @example
+    const {gt, lte, ne, in: opIn} = Sequelize.Op;
+    const where = {
+            attr0: '123',
+            attr1: {
+                [gt]: 50
+            },
+            attr2: {
+                [lte]: 45
+            },
+            attr3: {
+                [opIn]: [1,2,3]
+            },
+            attr4: {
+                [ne]: 5
+            }
+        }
+     */
     where: {},
+    /**
+     * 分页大小
+     */
     limit: number,
+    /**
+     * 分页起始位置
+     */
     offset: number
 }
 
@@ -220,7 +247,26 @@ export type Transaction = {
 export type ControllerContext = {
     services: ServiceType,
     res: ExpressResponse,
-    req: ExpressRequest
+    req: ExpressRequest,
+    /**
+     * 调用将执行下一个中间件，否则将挂起该次请求
+     * @param err 传入该参数，将调用 (err, req, res, next) => void 这一类型的中间件
+     * @example
+        app.get('/test', (req, res, next) => {
+            try {
+                const result = await req.services.apiService.searchApis({
+                    offset: 0,
+                    limit: Number.MAX_SAFE_INTEGER
+                })
+                const apiRes = new ApiResponse();
+                apiRes.setResult(result);
+                res.json(apiRes)
+            } catch (error) {
+                next(error);
+            }
+        })
+     */
+    next: (err?: any) => void
 }
 
 export type ServiceContext = {

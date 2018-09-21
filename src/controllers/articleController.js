@@ -13,11 +13,12 @@ export default class ArticelController extends BaseController{
         name: '文章搜索',
         description: '文章搜索'
     })
-    async searchArticel(req, res, next){
+    async searchArticel(){
+        const {req, res, next, services} = this.ctx;
         try {
             const {offset, pageSize, keyWord} = req.query;
             const apiRes = new ApiResponse()
-            const result = await req.services.articleService.searchArticles({
+            const result = await services.articleService.searchArticles({
                 limit: pageSize,
                 offset
             })
@@ -41,7 +42,8 @@ export default class ArticelController extends BaseController{
         description: '新增一篇文章',
         middleware: [Authority]
     })
-    async saveOrUpdateArticle(req, res, next){
+    async saveOrUpdateArticle(){
+        const {req, res, next, services} = this.ctx;
         try {
             const { article } = req.body;            
             const {user:{id}} = req.token;
@@ -50,7 +52,7 @@ export default class ArticelController extends BaseController{
             }else{                
                 article.creater = article.editer = id;
             }
-            await req.services.articleService.saveOrUpdateArticle(article);
+            await services.articleService.saveOrUpdateArticle(article);
             const apiRes = new ApiResponse();
             apiRes.setMessage('保存成功')
             res.json(apiRes)            

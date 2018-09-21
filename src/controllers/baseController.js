@@ -4,7 +4,7 @@ export default class BaseController{
     constructor(){
         const context: ControllerContext = undefined;
         /**
-         * 上下文
+         * 当前请求的上下文，包含services, req, res
          */
         this.ctx = context;
     }

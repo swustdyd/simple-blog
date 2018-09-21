@@ -27,10 +27,11 @@ export default class RoleController extends BaseController{
             }
         }
     })
-    async searchRoles(req, res, next){
+    async searchRoles(){
+        const {req, res, next, services} = this.ctx;
         try {
             const {offset, pageSize} = req.query;
-            const result = await req.services.roleService.searchRoles({
+            const result = await services.roleService.searchRoles({
                 limit: pageSize,
                 offset
             });
@@ -66,7 +67,8 @@ export default class RoleController extends BaseController{
             }
         }
     })
-    async saveOrUpdateRole(req, res, next){
+    async saveOrUpdateRole(){
+        const {req, res, next, services} = this.ctx;
         try {
             const { role, roleAndMenus, roleAndApis } = req.body;
             const {user:{id}} = req.token;
@@ -75,7 +77,7 @@ export default class RoleController extends BaseController{
             }else{                
                 role.creater = role.editer = id;
             }
-            await req.services.roleService.saveOrUpdateRole(role, roleAndMenus, roleAndApis)
+            await services.roleService.saveOrUpdateRole(role, roleAndMenus, roleAndApis)
             const apiRes = new ApiResponse();
             apiRes.setMessage('保存成功');
             res.json(apiRes)          

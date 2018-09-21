@@ -33,10 +33,11 @@ export default class UserController extends BaseController{
             }
         }
     })
-    async searchUsers(req, res, next){
+    async searchUsers(){
+        const {req, res, next, services} = this.ctx;
         try {
             const {offset, pageSize} = req.query;
-            const result = await req.services.userService.searchUsers({
+            const result = await services.userService.searchUsers({
                 limit: pageSize,
                 offset
             });
@@ -64,7 +65,8 @@ export default class UserController extends BaseController{
             }
         }
     })
-    async login(req, res, next){
+    async login(){
+        const {req, res, next, services} = this.ctx;
         try {
             const { password, userName, type } = req.body;
             const apiRes = new ApiResponse();
@@ -80,7 +82,7 @@ export default class UserController extends BaseController{
                     token
                 })
             }else{
-                const {list} = await req.services.userService.searchUsers({
+                const {list} = await services.userService.searchUsers({
                     where: {
                         name: userName
                     }
@@ -125,11 +127,12 @@ export default class UserController extends BaseController{
             }
         }
     })
-    async register(req, res, next){
+    async register(){
+        const {req, res, next, services} = this.ctx;
         try {
             const { user } = req.body;
             const apiRes = new ApiResponse();
-            const result = await req.services.userService.searchUsers({
+            const result = await services.userService.searchUsers({
                 where: {
                     name: user.name
                 }
@@ -139,7 +142,7 @@ export default class UserController extends BaseController{
             }else if(user.password !== user.confirm){
                 throw new BusinessException('密码不一致')
             }else{
-                await req.services.userService.saveOrUpdateUser(user);
+                await services.userService.saveOrUpdateUser(user);
             }
             res.json(apiRes)            
         } catch (e) {
@@ -161,13 +164,14 @@ export default class UserController extends BaseController{
             }
         }
     })
-    async saveOrUpdateUser(req, res, next){
+    async saveOrUpdateUser(){
+        const {req, res, next, services} = this.ctx;
         try {
             const { user } = req.body;
             const apiRes = new ApiResponse();
             let result = [];
             if(user.id){
-                result = await req.services.userService.searchUsers({
+                result = await services.userService.searchUsers({
                     where: {
                         name: user.name,
                         id: {
@@ -176,7 +180,7 @@ export default class UserController extends BaseController{
                     }
                 })
             }else{
-                result = await req.services.userService.searchUsers({
+                result = await services.userService.searchUsers({
                     where: {
                         name: user.name
                     }
@@ -186,7 +190,7 @@ export default class UserController extends BaseController{
             if(result && result.length > 0){
                 throw new BusinessException(`用户名“${user.name}”已存在`)
             }else{
-                await req.services.userService.saveOrUpdateUser(user);
+                await services.userService.saveOrUpdateUser(user);
                 apiRes.setMessage('保存成功')
             }
             res.json(apiRes)            
@@ -201,7 +205,8 @@ export default class UserController extends BaseController{
         name: '获取当前用户',
         description: '获取当前用户'
     })
-    async fetchCurrent(req, res, next){
+    async fetchCurrent(){
+        const {req, res, next, services} = this.ctx;
         try {
             const {token: {user}} = req;
             const resApi = new ApiResponse();
@@ -209,7 +214,7 @@ export default class UserController extends BaseController{
             if(user.id === DEFAULT_USER_ID){
                 returnMenus = DEFAULT_MENUS;
             }else{
-                const role = await req.services.roleService.getRoleById(user.roleId);
+                const role = await services.roleService.getRoleById(user.roleId);
                 const option = {
                     where: {
                         roleId: user.roleId
@@ -217,7 +222,7 @@ export default class UserController extends BaseController{
                     limit: Number.MAX_SAFE_INTEGER,
                     offset: 0
                 }
-                const {list} = await req.services.menuService.searchMenus(option);
+                const {list} = await services.menuService.searchMenus(option);
                 returnMenus = list;
             } 
             resApi.setResult({

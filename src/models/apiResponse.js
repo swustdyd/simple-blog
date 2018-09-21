@@ -1,5 +1,14 @@
 export default class ApiResponse{
-    constructor(ok: boolean = true, message){
+    /**
+     * 
+     * @param {*} ok 该次请求的返回结果, true: 成功，false: 失败
+     * @param {*} message 返回给前端的message
+     */
+    constructor(ok?: boolean = true, message: string){
+        if((typeof ok) === 'string'){
+            message = ok;
+            ok = true;
+        }
         /**
          * 返回的操作结果，默认为true: 成功
          */

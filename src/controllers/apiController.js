@@ -14,9 +14,10 @@ export default class ApiController extends BaseController{
         middleware: [Authority],
         description: '获取所有后台API接口'
     })
-    async getAllApis(req, res, next){
+    async getAllApis(){
+        const {req, res, next, services} = this.ctx;
         try {
-            const result = await req.services.apiService.searchApis({
+            const result = await services.apiService.searchApis({
                 offset: 0,
                 limit: Number.MAX_SAFE_INTEGER
             })
@@ -58,10 +59,11 @@ export default class ApiController extends BaseController{
             }
         }
     })
-    async searchApis(req, res, next){
+    async searchApis(){
+        const {req, res, next, services} = this.ctx;
         try {
             const {offset, pageSize, name, roleId, path} = req.query;
-            const result = await req.services.apiService.searchApis({
+            const result = await services.apiService.searchApis({
                 where: {
                     name,
                     roleId,

@@ -16,7 +16,7 @@ export default class MenuService extends BaseService{
         this.menuEntity = new MenuEntity(ctx);
     }
     @serviceComment({
-        desc: '搜索菜单',
+        desc: '搜索菜单, 目前支持的搜索条件为 name：菜单名，roleId：角色名称，parentMenu：父级菜单的id',
         params: {
             options: {
                 desc: '搜索条件',
@@ -70,6 +70,19 @@ export default class MenuService extends BaseService{
         }
     }
 
+    @serviceComment({
+        desc: '根据id获取菜单信息',
+        params: {
+            id: {
+                desc: '菜单id',
+                type: 'number'
+            }
+        },
+        returns: {
+            desc: '菜单数据',
+            type: 'Promise<Object>'
+        }
+    })
     async getMenuById(id: number){
         if(!id){
             throw new Error('菜单id不能为空');
@@ -81,6 +94,19 @@ export default class MenuService extends BaseService{
         });
     }
 
+    @serviceComment({
+        desc: '新增或者修改菜单信息，有id则更新，无id则新增',
+        params: {
+            menu: {
+                desc: '菜单数据',
+                type: 'Object'
+            }
+        },
+        returns: {
+            desc: '更新或者修改后的菜单数据',
+            type: 'Promise<Object>'
+        }
+    })
     async saveOrUpdateMenu(menu){
         //修改
         if(menu.id){
@@ -102,6 +128,19 @@ export default class MenuService extends BaseService{
         return menu;
     }
 
+    @serviceComment({
+        desc: '批量新增或者修改菜单信息，有id则更新，无id则新增',
+        params: {
+            menus: {
+                desc: '菜单信息的数组',
+                type: '[Object]'
+            }
+        },
+        returns: {
+            desc: '更新或者修改后的菜单数据',
+            type: 'Promise<[Object]>'
+        }
+    })
     async saveOrUpdateMenus(menus){
         const promiseList = [];
         menus.forEach((menu) => {

@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import logger from '../utils/logger'
 
 const lineBreak = '\r\n';
 let extraTypes = [];
@@ -32,7 +33,7 @@ function formatDesc(comment){
         const param = params[key];
         paramsDescArray.push(`${key} ${param.desc}`)
     }
-    return desc ? `\t\t/** ${desc} ${paramsDescArray.length > 0 ? `${lineBreak}\t\t * @param ${paramsDescArray.join(`${lineBreak}\t\t * @param `)}` : ''}${lineBreak}\t\t * @returns ${returns ? returns.desc : ''}${lineBreak}\t\t */${lineBreak}` : '';
+    return desc ? `\t\t/** ${desc} ${paramsDescArray.length > 0 ? `${lineBreak}\t\t * @param ${paramsDescArray.join(`${lineBreak}\t\t * @param `)}` : ''}${lineBreak}\t\t * @returns ${returns ? returns.desc || '' : ''}${lineBreak}\t\t */${lineBreak}` : '';
 }
 
 // 读取services文件夹下的文件
@@ -80,7 +81,7 @@ function importExtraTypes(importPath = '', extraTypes){
 }
 
 const isDev = process.env.NODE_ENV !== 'production'; 
-
+logger.info(`env: ${process.env.NODE_ENV}`);
 if(isDev){
     fs.writeFileSync(
         path.resolve(__dirname, '../type/service.js'), 

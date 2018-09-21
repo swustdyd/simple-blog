@@ -15,7 +15,8 @@ export default class TagController extends BaseController{
         description: '搜索标签',
         middleware: [Authority]
     })
-    async searchTags(req, res, next){
+    async searchTags(){
+        const {req, res, next, services} = this.ctx;
         try {
             const {offset, pageSize, name} = req.query;
             const where = {};
@@ -24,7 +25,7 @@ export default class TagController extends BaseController{
                     [like]: `%${name}%`
                 }
             }
-            const result = await req.services.tagService.searchTags({
+            const result = await services.tagService.searchTags({
                 where,
                 limit: pageSize,
                 offset
@@ -44,7 +45,8 @@ export default class TagController extends BaseController{
         name: '新增标签',
         description: '新增标签'
     })
-    async addTag(req, res, next){
+    async addTag(){
+        const {req, res, next, services} = this.ctx;
         try {
             const { tag } = req.body;
             const {user:{id}} = req.token;
@@ -53,7 +55,7 @@ export default class TagController extends BaseController{
             }else{                
                 tag.creater = tag.editer = id;
             }
-            await req.services.tagService.saveOrUpdateTag(tag);
+            await services.tagService.saveOrUpdateTag(tag);
             const apiRes = new ApiResponse();
             apiRes.setMessage('保存成功')
             res.json(apiRes)            
