@@ -60,6 +60,12 @@ module.exports = {
     "prefer-const": "error",
     "no-const-assign": "error",
     //只强制对象解构，不强制数组解构
-    "prefer-destructuring": [2, {"object": true, "array": false}, {"enforceForRenamedProperties": false}]
+    "prefer-destructuring": [2, {"object": true, "array": false}, {"enforceForRenamedProperties": false}],
+    "no-empty": 2,//块语句中的内容不能为空
+    "no-eq-null": 2,//禁止对null使用==或!=运算符
+    "no-inline-comments": 0,//禁止行内备注
+    "no-redeclare": 2,//禁止重复声明变量
+    "no-use-before-define": 2,//未定义前不能使用
+    "no-unused-vars": [2, {"vars": "all", "args": "after-used"}],//不能有声明后未被使用的变量或参数
   }
 }
