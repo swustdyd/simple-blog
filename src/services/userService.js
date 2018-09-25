@@ -1,5 +1,5 @@
 import {UserEntity} from '../models/user'
-import { User, SearchOptions } from '../type';
+import { User, SearchOptions, PageResult} from '../type';
 import {service, serviceComment} from '../utils/decorator'
 import BusinessException from '../models/businessException'
 import {md5Password} from '../utils/util'
@@ -14,20 +14,12 @@ export default class UserService extends BaseService{
         this.userEntity = new UserEntity(ctx);
     }
 
-    @serviceComment({
-        desc: '搜索用户信息',
-        params: {
-            options: {
-                desc: '搜索条件',
-                type: '@SearchOptions@'
-            }
-        },
-        returns: {
-            desc: '搜索的结果',
-            type: 'Promise<@PageResult@>'
-        }
-    })
-    async searchUsers(options: SearchOptions){
+    /**
+     * 搜索用户信息
+     * @param {*} options 搜索条件
+     * @returns 搜索的结果
+     */
+    async searchUsers(options: SearchOptions): Promise<PageResult>{
         const datas = await Promise.all([
             this.userEntity.findAll(options), 
             this.userEntity.count(options)
@@ -38,20 +30,12 @@ export default class UserService extends BaseService{
         }
     }
 
-    @serviceComment({
-        desc: '根据id获取用户信息',
-        params: {
-            id: {
-                desc: '用户id',
-                type: 'number'
-            }
-        },
-        returns: {
-            desc: '用户数据',
-            type: 'Promise<Object>'
-        }
-    })
-    async getUserById(id: number){
+    /**
+     * 根据id获取用户信息
+     * @param {*} id 用户id
+     * @returns 用户数据
+     */
+    async getUserById(id: number): Promise<User>{
         if(!id){
             throw new Error('用户id不能为空');
         }
@@ -62,20 +46,12 @@ export default class UserService extends BaseService{
         });
     }
 
-    @serviceComment({
-        desc: '保存或者修改用户信息',
-        params: {
-            user: {
-                desc: '用户信息数组',
-                type: 'Object'
-            }
-        },
-        returns: {
-            desc: '存储后的用户信息',
-            type: 'Promise<Object>'
-        }
-    })
-    async saveOrUpdateUser(user: User){
+    /**
+     * 保存或者修改用户信息
+     * @param {*} user 用户信息
+     * @returns 存储后的用户信息
+     */
+    async saveOrUpdateUser(user: User): Promise<User>{
         //对密码进行加密
         if(user.password){
             user.password = md5Password(user.password, PASSWORD_MD5_KEY)
@@ -113,7 +89,12 @@ export default class UserService extends BaseService{
             type: 'Promise<[Object]>'
         }
     })
-    async saveOrUpdateUsers(users: User[]){
+    /**
+     * 批量保存或者修改用户信息
+     * @param {*} users 用户信息数组
+     * @returns 存储后的用户信息
+     */
+    async saveOrUpdateUsers(users: Array<User>): Promise<Array<User>>{
         const promiseList = [];
         users.forEach((user) => {
             promiseList.push(this.saveOrUpdateUser(user));

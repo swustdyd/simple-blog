@@ -1,10 +1,8 @@
 import {MenuEntity} from '../models/menu'
-import {RoleAndMenusModel} from '../models/roleAndMenus'
 import { SearchOptions } from '../type';
-import {service, serviceComment} from '../utils/decorator'
+import {service} from '../utils/decorator'
 import BusinessException from '../models/businessException'
 import {PageResult} from '../type'
-import {db} from '../db'
 import {QueryTypes} from '../db/sequelize'
 import BaseService from './baseService'
 
@@ -15,19 +13,13 @@ export default class MenuService extends BaseService{
         super(ctx);
         this.menuEntity = new MenuEntity(ctx);
     }
-    @serviceComment({
-        desc: '搜索菜单, 目前支持的搜索条件为 name：菜单名，roleId：角色名称，parentMenu：父级菜单的id',
-        params: {
-            options: {
-                desc: '搜索条件',
-                type: '@SearchOptions@'
-            }
-        },
-        returns: {
-            desc: '搜索结果',
-            type: 'Promise<@PageResult@>'
-        }
-    })
+    
+    /**
+     * 搜索菜单, 
+     * @note 目前支持的搜索条件为 name：菜单名，roleId：角色名称，parentMenu：父级菜单的id
+     * @param {*} options 搜索条件
+     * @returns 搜索结果
+     */
     async searchMenus(options: SearchOptions): Promise<PageResult>{
         const {where = {}, offset, limit} = options;
         const {name, parentMenu, roleId} = where;
@@ -68,19 +60,11 @@ export default class MenuService extends BaseService{
         }
     }
 
-    @serviceComment({
-        desc: '根据id获取菜单信息',
-        params: {
-            id: {
-                desc: '菜单id',
-                type: 'number'
-            }
-        },
-        returns: {
-            desc: '菜单数据',
-            type: 'Promise<Object>'
-        }
-    })
+    /**
+     * 根据id获取菜单信息
+     * @param {*} id 菜单id
+     * @returns 菜单数据
+     */
     async getMenuById(id: number){
         if(!id){
             throw new Error('菜单id不能为空');
@@ -92,20 +76,12 @@ export default class MenuService extends BaseService{
         });
     }
 
-    @serviceComment({
-        desc: '新增或者修改菜单信息，有id则更新，无id则新增',
-        params: {
-            menu: {
-                desc: '菜单数据',
-                type: 'Object'
-            }
-        },
-        returns: {
-            desc: '更新或者修改后的菜单数据',
-            type: 'Promise<Object>'
-        }
-    })
-    async saveOrUpdateMenu(menu){
+    /**
+     * 新增或者修改菜单信息，有id则更新，无id则新增
+     * @param {*} menu 菜单数据
+     * @returns 更新或者修改后的菜单数据
+     */
+    async saveOrUpdateMenu(menu: Object): Promise<Object>{
         //修改
         if(menu.id){
             menu.updateAt = Date.now();
@@ -126,20 +102,12 @@ export default class MenuService extends BaseService{
         return menu;
     }
 
-    @serviceComment({
-        desc: '批量新增或者修改菜单信息，有id则更新，无id则新增',
-        params: {
-            menus: {
-                desc: '菜单信息的数组',
-                type: '[Object]'
-            }
-        },
-        returns: {
-            desc: '更新或者修改后的菜单数据',
-            type: 'Promise<[Object]>'
-        }
-    })
-    async saveOrUpdateMenus(menus){
+    /**
+     * 批量新增或者修改菜单信息，有id则更新，无id则新增
+     * @param {*} menu 菜单数据
+     * @returns 更新或者修改后的菜单数据
+     */
+    async saveOrUpdateMenus(menus: Array<Object>): Promise<Array<Object>>{
         const promiseList = [];
         menus.forEach((menu) => {
             promiseList.push(this.saveOrUpdateMenu(menu));

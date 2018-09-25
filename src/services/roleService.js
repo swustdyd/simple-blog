@@ -1,9 +1,7 @@
 import {RoleEntity} from '../models/role'
 import { Role, SearchOptions } from '../type';
-import {service, serviceComment} from '../utils/decorator'
+import {service} from '../utils/decorator'
 import BusinessException from '../models/businessException'
-import {md5Password} from '../utils/util'
-import {PASSWORD_MD5_KEY} from '../utils/setting'
 import {PageResult} from '../type'
 import BaseService from './baseService'
 
@@ -15,19 +13,11 @@ export default class RoleService extends BaseService{
         this.roleEntity = new RoleEntity(ctx);
     }
 
-    @serviceComment({
-        desc: '搜索角色信息',
-        params: {
-            options: {
-                desc: '搜索条件',
-                type: '@SearchOptions@'
-            }
-        },
-        returns: {
-            desc: '搜索的结果',
-            type: 'Promise<@PageResult@>'
-        }
-    })
+    /**
+     * 搜索角色信息
+     * @param {*} options 搜索条件
+     * @returns 搜索的结果
+     */
     async searchRoles(options: SearchOptions): Promise<PageResult>{
         const datas = await Promise.all([
             this.roleEntity.findAll(options), 
@@ -39,20 +29,12 @@ export default class RoleService extends BaseService{
         }
     }
 
-    @serviceComment({
-        desc: '根据id获取角色信息',
-        params: {
-            id: {
-                desc: '角色id',
-                type: 'number'
-            }
-        },
-        returns: {
-            desc: '角色数据',
-            type: 'Promise<Object>'
-        }
-    })
-    async getRoleById(id: number){
+    /**
+     * 根据id获取角色信息
+     * @param {*} id 角色id
+     * @returns 角色数据
+     */
+    async getRoleById(id: number): Promise<Object>{
         if(!id){
             throw new Error('角色id不能为空');
         }
@@ -63,28 +45,14 @@ export default class RoleService extends BaseService{
         });
     }
 
-    @serviceComment({
-        desc: '保存或者修改角色信息',
-        params: {
-            role: {
-                desc: '角色信息，有该id则为更新，无该id则新增',
-                type: 'Object'
-            },
-            roleAndMenus: {
-                desc: '该角色拥有的菜单浏览权限',
-                type: '[Object]'
-            },
-            roleAndApis: {
-                desc: '该角色拥有的后台Api访问权限',
-                type: '[Object]'
-            }
-        },
-        returns: {
-            desc: '存储后的角色信息',
-            type: 'Promise<Object>'
-        }
-    })
-    async saveOrUpdateRole(role: Role, roleAndMenus = [], roleAndApis = []){
+    /**
+     * 保存或者修改角色信息
+     * @param {*} role 角色信息，有该id则为更新，无该id则新增
+     * @param {*} roleAndMenus 该角色拥有的菜单浏览权限
+     * @param {*} roleAndApis 该角色拥有的后台Api访问权限
+     * @returns 存储后的角色信息
+     */
+    async saveOrUpdateRole(role: Role, roleAndMenus?: Array<Object> = [], roleAndApis?: Array<Object> = []): Promise<Object>{
         const {transaction, services} = this.ctx;
         await transaction.startTransaction();
         try {
@@ -145,21 +113,13 @@ export default class RoleService extends BaseService{
             throw error;
         }        
     }
-    
-    @serviceComment({
-        desc: '批量保存或者修改角色信息',
-        params: {
-            roles: {
-                desc: '角色信息数组',
-                type: '[Object]'
-            }
-        },
-        returns: {
-            desc: '存储后的角色信息',
-            type: 'Promise<[Object]>'
-        }
-    })
-    async saveOrUpdateRoles(roles: Role[]){
+
+    /**
+     * 批量保存或者修改角色信息
+     * @param {*} role 角色信息，有该id则为更新，无该id则新增
+     * @returns 存储后的角色信息
+     */
+    async saveOrUpdateRoles(roles: Array<Role>): Promise<Array<Object>>{
         const promiseList = [];
         roles.forEach((role) => {
             promiseList.push(this.saveOrUpdateRole(role));
