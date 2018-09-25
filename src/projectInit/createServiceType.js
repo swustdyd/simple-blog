@@ -1,39 +1,87 @@
 import fs from 'fs'
 import path from 'path'
-import logger from '../utils/logger'
+import logger from '../utils/logger';
 
 const lineBreak = '\r\n';
 let extraTypes = [];
+const types = [
+    'Promise',
+    'Object',
+    'object',
+    'Function',
+    'Array',
+    'Number',
+    'number',
+    'String',
+    'string',
+    'Boolean',
+    'boolean',
+    'void'
+].join(', ');
 
-function getType(typeString = ''){
-    const start = typeString.indexOf('@');
-    const end = typeString.lastIndexOf('@');
-    if(start !== -1 && end !== -1){
-        const extraType = typeString.substring(start + 1, end);
-        extraTypes.push(extraType);
+function checkTypesForType(type = ''){
+    const reg = new RegExp('[a-zA-Z]*<[a-zA-Z<>]*?>', 'g')
+    const start = type.indexOf('<');
+    const end = type.lastIndexOf('>');
+    const preType = type.substring(0, start);
+    const newType = type.substring(start + 1, end);
+    logger.info(type, preType, newType);
+    if(types.indexOf(preType) === -1){
+        extraTypes.push(preType);
     }
-    return typeString.replace(/\@/g, '');
+
+    if(reg.test(newType)){                
+        checkTypesForType(newType);
+    }else if(types.indexOf(newType) === -1){
+        extraTypes.push(newType);
+    }
 }
 
-
-function formatParams(comment){
-    const {params, returns} = comment;
-    const paramsArray = [];
-    for (const key in params) {
-        const param = params[key];
-        paramsArray.push(`${key}: ${getType(param.type)}`)
+function checkExtraTypesForFile(fileString = ''){
+    const reg = new RegExp('(:\\s*[a-zA-Z<>]*?[,\\)}])|([a-zA-Z]*<[a-zA-Z<>]*>)', 'g')
+    const matchResult = fileString.match(reg);
+    if(matchResult){
+        let result = matchResult.map((type) => {
+            type = type.replace(/[:,\)}\s]/g, '');
+            logger.debug(type);
+            if(reg.test(type)){                
+                checkTypesForType(type);
+                return '';
+            }else if(types.indexOf(type) === -1){
+                return type;
+            }else{
+                return '';
+            }
+            
+        })
+        result = result.filter((type) => { return type})
+        extraTypes.push(...result);
     }
-    return `(${paramsArray.join(', ')}) => ${returns && returns.type ? getType(returns.type) : 'void'}`;
 }
 
-function formatDesc(comment){
-    const {params, desc, returns} = comment;
-    const paramsDescArray = [];
-    for (const key in params) {
-        const param = params[key];
-        paramsDescArray.push(`${key} ${param.desc}`)
-    }
-    return desc ? `\t\t/** ${desc} ${paramsDescArray.length > 0 ? `${lineBreak}\t\t * @param ${paramsDescArray.join(`${lineBreak}\t\t * @param `)}` : ''}${lineBreak}\t\t * @returns ${returns ? returns.desc || '' : ''}${lineBreak}\t\t */${lineBreak}` : '';
+function formatServicePropertys(filePath) {
+    const fileString = fs.readFileSync(filePath, {encoding: 'utf8'});
+    const itemReg = new RegExp('\\/\\*\\*[\\s\\S]*?\\*\\/[a-zA-Z()<>:=,\\r\\n\\s]*?{', 'g')
+    const commentReg = new RegExp('\\/\\*\\*[\\s\\S]*?\\*\\/', 'g')
+    const propertys = [];
+    fileString.match(itemReg) && fileString.match(itemReg).forEach((item) => {  
+        const comment = item.match(commentReg)[0].replace(/\r\n/g, '\r\n\t');
+        let index = item.lastIndexOf('*/');
+        let other = item.substring(index + 2);
+        
+        checkExtraTypesForFile(other);
+
+        index = other.indexOf('(');
+        const name = other.substring(0, index).replace(/\r\n/g, '').split(/\s/).filter((item) => {return item && item !== 'async'});
+        other = other.substring(index).replace(/\r\n/g, '');
+        const params = other.substring(0, other.lastIndexOf(')') + 1);
+        const matchResult = other.match(/\)\s*:/);
+        const matchString = matchResult ? matchResult[0] : ''; 
+        index = matchResult ? matchResult.index : index;
+        const returns = matchString ? other.substring(index + matchString.length).replace('{', '').replace(/\s/g, '') : 'void';
+        propertys.push(`\t\t${comment}${lineBreak}\t\t${name}: ${params} => ${returns}`)
+    })
+    return propertys;
 }
 
 // 读取services文件夹下的文件
@@ -41,27 +89,13 @@ const dirPath = path.resolve(__dirname, '../services');
 
 let services = fs.readdirSync(dirPath).map((fileName) => {
     const service = require(path.join(dirPath, fileName)).default;
-    if(service && service._isService){
-        const serviceInstance = new service({});        
+    if(service && service._isService){   
         const info = {
             name: service._name,
             desc: service._desc,
-            propertys: []
+            propertys: ''
         }
-        const {_comments = {}} = serviceInstance;
-        let propertyKeys = Object.getOwnPropertyNames(serviceInstance.__proto__);
-        propertyKeys = propertyKeys.concat(Object.getOwnPropertyNames(serviceInstance));
-        propertyKeys.forEach((key) => {
-            const property = serviceInstance[key];
-            const type = typeof property;
-            const comment = _comments[key]
-            if(key !== 'constructor' && type === 'function' && comment){                
-                info.propertys.push(`${formatDesc(comment)}\t\t${key}: ${formatParams(comment)}`);
-            }else if(key !== 'constructor' && type === 'function'){
-                info.propertys.push(`\t\t${key}: Function`)
-            }
-        })
-        info.propertys = info.propertys.join(`,${lineBreak}${lineBreak}`);
+        info.propertys = formatServicePropertys(path.join(dirPath, fileName)).join(`,${lineBreak}${lineBreak}`);
         return info;
     }
 })
