@@ -1,6 +1,5 @@
 import fs from 'fs'
 import path from 'path'
-import logger from '../utils/logger';
 
 const lineBreak = '\r\n';
 let extraTypes = [];
@@ -57,7 +56,7 @@ function checkExtraTypesForFile(fileString = ''){
 
 function formatServicePropertys(filePath) {
     const fileString = fs.readFileSync(filePath, {encoding: 'utf8'});
-    const itemReg = /\/\*\*[\s\S]*?\*\/[a-zA-Z(){}<>:=,\?\[\]\r\n\s]*?{\r\n/g;
+    const itemReg = /\/\*\*[\s\S]*?\*\/[a-zA-Z(){}<>:=,\'\?\[\]\r\n\s]*?{\r\n/g;
     const commentReg = /\/\*\*[\s\S]*?\*\//g
     const propertys = [];
     fileString.match(itemReg) && fileString.match(itemReg).forEach((item) => {  
