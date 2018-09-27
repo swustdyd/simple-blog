@@ -12,6 +12,7 @@ import BaseConfig from '../configs'
 import exceptionHandle from './utils/exceptionHandle'
 import {db} from './db'
 import logger from './utils/logger'
+import initSocket from './socket'
 
 logger.info('Project begin to start, please waite...');
 
@@ -66,6 +67,8 @@ fs.readdirSync(dirPath).forEach((fileName) => {
 projectInit(app)
 
 app.use(exceptionHandle);
+
+initSocket(app);
 
 app.listen(serverPort, function () {
     logger.info(`Project(${process.env.NODE_ENV}) is running on port ${serverPort}`);
