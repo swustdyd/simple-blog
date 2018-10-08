@@ -1,17 +1,18 @@
 import http from 'http'
 import {server} from 'websocket'
+import logger from '../utils/logger'
 
 const WebSocketServer = server;
 
 export default () => {
     const httpServer = http.createServer(function(request, response) {
-        console.log((new Date()) + ' Received request for ' + request.url);
+        logger.debug((new Date()) + ' Received request for ' + request.url);
         response.writeHead(404);
         response.end();
     });
 
     httpServer.listen(8081, function() {
-        console.log((new Date()) + ' Server is listening on port 8081');
+        logger.debug((new Date()) + ' Server is listening on port 8081');
     });
 
     const wsServer = new WebSocketServer({
@@ -28,10 +29,10 @@ export default () => {
         if(!global.socketConnections.get(key)){
             global.socketConnections.set(key, connection);
         }
-        console.log((new Date()) + ' Connection accepted.');
+        logger.debug(`${new Date()} Connection(${key}) accepted.`);
         connection.on('message', function(message) {
             if (message.type === 'utf8') {
-                console.log('Received Message: ' + message.utf8Data);
+                logger.debug(`Received Message(${key}): ${message.utf8Data}`);
                 const data = JSON.parse(message.utf8Data);
                 if(data.type === 'broadcast'){
                     global.socketConnections.forEach((con) => {
@@ -41,13 +42,13 @@ export default () => {
                     connection.sendUTF(message.utf8Data);
                 }
             }else if (message.type === 'binary') {
-                console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
+                logger.debug(`Received Binary Message of ${message.binaryData.length} bytes`);
                 connection.sendBytes(message.binaryData);
             }
         });
         connection.on('close', function() {
             global.socketConnections.delete(key);
-            console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
+            logger.debug(`${new Date()} Peer(${key}) ${connection.remoteAddress} disconnected.'`);
         });
     });
 }

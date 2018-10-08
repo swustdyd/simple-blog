@@ -1,6 +1,5 @@
 import BusinessException from '../models/businessException'
 import {exceptionCode} from '../utils/exceptionHandle'
-import Path from 'path'
 import jwt from 'jsonwebtoken'
 import { TOKEN_SECRET, SUPERADMIN_ROLE_ID, ADMIN_ROLE_ID, DEFAULT_USER_ID } from './setting';
 
@@ -205,10 +204,36 @@ export const route = (path: string, method: string = Method.GET) => {
         target._routes.push({
             path,
             method,
-            fnName: name
+            functionName: name
         });
 
         return descriptor;
+    }
+}
+
+function checkOptions(options) {
+    const {path, name, description, middleware, method} = options;
+    if(method !== 'get' && method !== 'post'){
+        throw new Error(`method must be get or post, you got '${method}'`);
+    }
+    if(!path){
+        throw new Error('path can not be null');
+    }
+    if(!name){
+        throw new Error('name can not be null');
+    }
+    if(!description){
+        throw new Error('description can not be null');
+    }
+    if(middleware){
+        if(!(middleware instanceof Array)){
+            throw new Error('middleware must be Array');
+        }
+        middleware.forEach((func) => {
+            if(typeof func !== 'function'){
+                throw new Error('the item of middleware must be function');
+            }
+        })
     }
 }
 
@@ -245,32 +270,6 @@ export const routeFurther = (options: {
         });
 
         return descriptor;
-    }
-}
-
-function checkOptions(options) {
-    const {path, name, description, middleware, method} = options;
-    if(method !== 'get' && method !== 'post'){
-        throw new Error(`method must be get or post, you got '${method}'`);
-    }
-    if(!path){
-        throw new Error('path can not be null');
-    }
-    if(!name){
-        throw new Error('name can not be null');
-    }
-    if(!description){
-        throw new Error('description can not be null');
-    }
-    if(middleware){
-        if(!(middleware instanceof Array)){
-            throw new Error('middleware must be Array');
-        }
-        middleware.forEach((func) => {
-            if(typeof func !== 'function'){
-                throw new Error('the item of middleware must be function');
-            }
-        })
     }
 }
 
