@@ -62,4 +62,4 @@ typings/
 .env
 
 # something special
-src/type/service.js
+# src/type/service.js
