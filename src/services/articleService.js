@@ -2,7 +2,7 @@ import {ArticleEntity} from '../models/article'
 import BusinessException from '../models/businessException'
 import { Article, SolrOptionsType, ArticleTag, Transaction } from '../type';
 import { service } from '../utils/decorator'
-import BaseService from './BaseService'
+import BaseService from './baseService'
 import {db} from '../db'
 import logger from '../utils/logger'
 
