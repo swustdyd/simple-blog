@@ -50,7 +50,7 @@ if(isDev){
     }));
 }
 
-app.use(express.static(path.resolve(BaseConfig.root, './public')));
+app.use(express.static(path.resolve(BaseConfig.root, '../blog-manage-client/dist')));
 
 app.use(compression());
 

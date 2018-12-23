@@ -1,6 +1,7 @@
 import http from 'http'
 import {server} from 'websocket'
 import logger from '../utils/logger'
+import { socketPort } from '../../configs'
 
 const WebSocketServer = server;
 
@@ -11,8 +12,8 @@ export default () => {
         response.end();
     });
 
-    httpServer.listen(8081, function() {
-        logger.debug((new Date()) + ' Server is listening on port 8081');
+    httpServer.listen(socketPort, function() {
+        logger.debug((new Date()) + ' Socket Server is listening on port', socketPort);
     });
 
     const wsServer = new WebSocketServer({
