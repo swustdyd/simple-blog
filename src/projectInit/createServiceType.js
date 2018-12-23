@@ -109,7 +109,7 @@ function importExtraTypes(importPath = '', extraTypes){
     return `import {${extraTypes.join(', ')}} from '${importPath}'`
 }
 
-const isDev = process.env.NODE_ENV !== 'production'; 
+const isDev = process.env.NODE_ENV === 'dev'; 
 
 if(isDev){
     fs.writeFileSync(
