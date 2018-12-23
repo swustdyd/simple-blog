@@ -1,12 +1,13 @@
 import Sequelize from 'sequelize'
 import logger from '../utils/logger'
+import { dbPwd, dbAccount } from '../../../config'
 
 const {Op} = Sequelize;
 
 /**
  * sequelize实例
  */
-export const sequelize = new Sequelize('blog', 'root', 'DD89757000', {
+export const sequelize = new Sequelize('blog', dbAccount, dbPwd, {
     host: 'localhost',
     dialect: 'mysql',
     pool: {
