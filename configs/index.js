@@ -1,9 +1,9 @@
 const path = require('path')
 
 module.exports = {
-    serverHost: 'http://10.130.196.85',
+    serverHost: 'http://localhost',
     serverPort: 3001,
-    clientHost: 'http://10.130.196.85',
+    clientHost: 'http://localhost',
     clientPort: 8000,
     clientDevPort: 8000,
     root: path.resolve(__dirname, '../'),
