@@ -46,7 +46,7 @@ export default class ArticleService extends BaseService{
         await transaction.startTransaction();
         try {
             // 修改
-            if(article.id){
+            if(article.id > 0){
                 article.updateAt = Date.now();
                 await this.articleEntity.update(article, {
                     where: {

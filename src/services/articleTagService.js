@@ -50,7 +50,7 @@ export default class ArticelTagService extends BaseService{
 
     async saveOrUpdateArticleTag(articleTag: ArticleTag){
         //修改
-        if(articleTag.id){
+        if(articleTag.id > 0){
             articleTag.updateAt = Date.now();
             const originArticleTag = await this.getTagById(articleTag.id);
             if(!originArticleTag){

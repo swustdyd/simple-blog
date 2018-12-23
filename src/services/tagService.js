@@ -36,7 +36,7 @@ export default class TagService extends BaseService{
 
     async saveOrUpdateTag(tag: Tag){
         //修改
-        if(tag.id){
+        if(tag.id > 0){
             tag.updateAt = Date.now();
             const originTag = await this.getTagById(tag.id);
             if(!originTag){

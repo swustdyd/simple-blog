@@ -81,7 +81,7 @@ export default class ApiService extends BaseService{
      */
     async saveOrUpdateApi(api: Object){
         //修改
-        if(api.id){
+        if(api.id > 0){
             api.updateAt = Date.now();
             const originApi = await this.getApiById(api.id);
             if(!originApi){

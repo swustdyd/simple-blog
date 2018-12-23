@@ -34,7 +34,7 @@ export default class RoleAndMenuService extends BaseService{
      */
     async saveOrUpdateRoleAndMenu(roleAndMenu: Object): Promise<Object>{
         //修改
-        if(roleAndMenu.id){
+        if(roleAndMenu.id > 0){
             roleAndMenu.updateAt = Date.now();
             const originTag = await this.getTagById(roleAndMenu.id);
             if(!originTag){

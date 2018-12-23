@@ -57,7 +57,7 @@ export default class UserService extends BaseService{
             user.password = md5Password(user.password, PASSWORD_MD5_KEY)
         }
         //修改
-        if(user.id){
+        if(user.id > 0){
             user.updateAt = Date.now();
             const originUser = await this.getUserById(user.id);
             if(!originUser){

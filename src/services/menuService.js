@@ -83,7 +83,7 @@ export default class MenuService extends BaseService{
      */
     async saveOrUpdateMenu(menu: Object): Promise<Object>{
         //修改
-        if(menu.id){
+        if(menu.id > 0){
             menu.updateAt = Date.now();
             const originMenu = await this.getMenuById(menu.id);
             if(!originMenu){

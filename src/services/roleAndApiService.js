@@ -34,7 +34,7 @@ export default class RoleAndApiService extends BaseService{
      */
     async saveOrUpdateRoleAndApi(roleAndApi: Object): Promise<Object>{
         //修改
-        if(roleAndApi.id){
+        if(roleAndApi.id > 0){
             roleAndApi.updateAt = Date.now();
             const origin = await this.getTagById(roleAndApi.id);
             if(!origin){

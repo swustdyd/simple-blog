@@ -57,7 +57,7 @@ export default class RoleService extends BaseService{
         await transaction.startTransaction();
         try {
             //修改
-            if(role.id){
+            if(role.id > 0){
                 role.updateAt = Date.now();
                 const originRole = await this.getRoleById(role.id);
                 if(!originRole){
