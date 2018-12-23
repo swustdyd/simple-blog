@@ -37,7 +37,7 @@ export default class MenuService extends BaseService{
         }
         if(roleId){
             whereSql.push('ram.roleId = :roleId')
-            joinSql.push('inner join roleandmenus ram on m.id = ram.menuId')
+            joinSql.push('inner join roleAndMenus ram on m.id = ram.menuId')
         }
 
         joinSql = joinSql.join(' ');

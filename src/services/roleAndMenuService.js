@@ -71,7 +71,7 @@ export default class RoleAndMenuService extends BaseService{
      * @param {*} roleId 角色id
      */
     async deleteRoleAndMenusByRoleId(roleId: number): Promise<void>{
-        await this.roleAndMenusEntity.query('delete from roleandmenus where roleId = :roleId', {
+        await this.roleAndMenusEntity.query('delete from roleAndMenus where roleId = :roleId', {
             replacements: {
                 roleId
             }
