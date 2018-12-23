@@ -71,7 +71,7 @@ export default class RoleAndApiService extends BaseService{
      * @param {*} roleId 角色id
      */
     async deleteRoleAndApiByRoleId(roleId: number): Promise<void>{
-        await this.roleAndApisEntity.query('delete from roleandapis where roleId = :roleId', {
+        await this.roleAndApisEntity.query('delete from roleAndApis where roleId = :roleId', {
             replacements: {
                 roleId
             }

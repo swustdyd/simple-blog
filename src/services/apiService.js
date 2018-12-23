@@ -37,7 +37,7 @@ export default class ApiService extends BaseService{
         }
         if(roleId){
             whereSql.push('rar.roleId = :roleId')
-            joinSql.push('inner join roleandapis rar on a.id = rar.apiId')
+            joinSql.push('inner join roleAndApis rar on a.id = rar.apiId')
         }
 
         joinSql = joinSql.join(' ');
