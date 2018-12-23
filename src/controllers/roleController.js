@@ -72,7 +72,7 @@ export default class RoleController extends BaseController{
         try {
             const { role, roleAndMenus, roleAndApis } = req.body;
             const {user:{id}} = req.token;
-            if(role.id){
+            if(role.id > 0){
                 role.editer = id;
             }else{                
                 role.creater = role.editer = id;

@@ -47,7 +47,7 @@ export default class ArticelController extends BaseController{
         try {
             const { article } = req.body;            
             const {user:{id}} = req.token;
-            if(article.id){
+            if(article.id > 0){
                 article.editer = id;
             }else{                
                 article.creater = article.editer = id;
