@@ -69,7 +69,7 @@ export default class RoleController extends BaseController{
     })
     async saveOrUpdateRole(){
         const {req, res, next, services} = this.ctx;
-        try {
+        try {  
             const { role, roleAndMenus, roleAndApis } = req.body;
             const {user:{id}} = req.token;
             if(role.id > 0){
