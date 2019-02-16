@@ -1,7 +1,7 @@
 module.exports = {
     apps : [{
         name: 'app-production',
-        script: 'dist/app.js',
+        script: './dist/app.js',
         watch: ['dist'],
         env: {
             'NODE_ENV': 'production'
