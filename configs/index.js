@@ -1,6 +1,6 @@
 const path = require('path')
 const baseConfig = require('../../config');
-const { serverHost, serverPort, clientHost, clientPort, socketPort } = baseConfig;
+const { serverHost, serverPort, clientHost, clientPort, socketPort, dbhost, dbport } = baseConfig;
 
 module.exports = {
     serverHost,
@@ -10,10 +10,8 @@ module.exports = {
     clientDevPort: clientPort,
     socketPort,
     root: path.resolve(__dirname, '../'),
-    dbConnectString: 'mongodb://localhost:27017/blog',
     dayFormatString: 'YYYY-MM-DD',    
     dateFormatString: 'YYYY-MM-DD HH:mm:ss',
-    dsadsa: 'dsadsa',
-    dj: 'dsds',
-    ddddd: 'dadsadsadadsaddddddsdsdsdsdsddsadasdsadsa'
+    dbhost,
+    dbport
 }

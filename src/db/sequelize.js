@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize'
 import logger from '../utils/logger'
-import { dbPwd, dbAccount } from '../../../config'
+import { dbPwd, dbAccount, dbhost } from '../../../config'
 
 const {Op} = Sequelize;
 
@@ -8,7 +8,7 @@ const {Op} = Sequelize;
  * sequelize实例
  */
 export const sequelize = new Sequelize('blog', dbAccount, dbPwd, {
-    host: 'localhost',
+    host: dbhost,
     dialect: 'mysql',
     pool: {
         max: 100,
