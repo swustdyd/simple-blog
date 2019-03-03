@@ -63,3 +63,5 @@ typings/
 
 # something special
 # src/type/service.js
+
+nohup.out
