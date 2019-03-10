@@ -6,7 +6,7 @@ import {Authority} from '../middlewares/authority'
 
 const {like} = OP;
 
-// @controller()
+ @controller()
 export default class TagController extends BaseController{
 
     @routeFurther({
@@ -15,28 +15,28 @@ export default class TagController extends BaseController{
         description: '搜索标签',
         middleware: [Authority]
     })
-    async searchTags(){
-        const {req, res, next, services} = this.ctx;
-        try {
-            const {offset, pageSize, name} = req.query;
-            const where = {};
-            if(name){
-                where.name = {
-                    [like]: `%${name}%`
-                }
-            }
-            const result = await services.tagService.searchTags({
-                where,
-                limit: pageSize,
-                offset
-            });
-            const apiRes = new ApiResponse();
-            apiRes.setResult(result);
-            res.json(apiRes)
-        } catch (error) {
-            next(error);
-        }
-    }
+     async searchTags(){
+         const {req, res, next, services} = this.ctx;
+         try {
+             const {offset, pageSize, name} = req.query;
+             const where = {};
+             if(name){
+                 where.name = {
+                     [like]: `%${name}%`
+                 }
+             }
+             const result = await services.tagService.searchTags({
+                 where,
+                 limit: pageSize,
+                 offset
+             });
+             const apiRes = new ApiResponse();
+             apiRes.setResult(result);
+             res.json(apiRes)
+         } catch (error) {
+             next(error);
+         }
+     }
 
     @routeFurther({
         path: '/saveOrUpdateTag',
@@ -65,4 +65,4 @@ export default class TagController extends BaseController{
     }
 
 
-}
+ }
