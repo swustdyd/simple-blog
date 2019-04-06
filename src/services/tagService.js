@@ -4,7 +4,7 @@ import {service} from '../utils/decorator'
 import BusinessException from '../models/businessException'
 import BaseService from './baseService'
 
-// @service('tagService')
+@service('tagService')
 export default class TagService extends BaseService{
 
     constructor(ctx){
