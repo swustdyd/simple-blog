@@ -1,14 +1,13 @@
 import { routeFurther, controller } from '../utils/decorator'
 import BaseController from './baseController'
-import {SolrOptionsType} from '../type'
 import ApiResponse from '../models/apiResponse'
-import logger from '../utils/logger'
 import {PASSWORD_MD5_KEY, DEFAULT_USER_NAME, DEFAULT_USER_PASSWORD, DEFAULT_MENUS, TOKEN_SECRET, DEFAULT_USER_ID} from '../utils/setting'
 import {comparePassword} from '../utils/util'
 import BusinessException from '../models/businessException';
 import jwt from 'jsonwebtoken'
 import {OP} from '../db'
 import {Authority} from '../middlewares/authority'
+import { MockNoticesData } from '../mock/notices'
 
 const {ne} = OP;
 
@@ -68,7 +67,7 @@ export default class UserController extends BaseController{
     async login(){
         const {req, res, next, services} = this.ctx;
         try {
-            const { password, userName, type } = req.body;
+            const { password, userName } = req.body;
             const apiRes = new ApiResponse();
             if(userName === DEFAULT_USER_NAME && password === DEFAULT_USER_PASSWORD){
                 const token = jwt.sign({
@@ -214,7 +213,7 @@ export default class UserController extends BaseController{
             if(user.id === DEFAULT_USER_ID){
                 returnMenus = DEFAULT_MENUS;
             }else{
-                const role = await services.roleService.getRoleById(user.roleId);
+                await services.roleService.getRoleById(user.roleId);
                 const option = {
                     where: {
                         roleId: user.roleId
@@ -229,6 +228,22 @@ export default class UserController extends BaseController{
                 user, 
                 menus: returnMenus
             })
+            res.json(resApi)
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    @routeFurther({
+        path: '/queryNotices',
+        name: '获取通知',
+        description: '获取当前用户的相关通知'
+    })
+    queryNotice(){
+        const { res, next} = this.ctx;
+        try {
+            const resApi = new ApiResponse();
+            resApi.setResult(MockNoticesData)
             res.json(resApi)
         } catch (e) {
             next(e);

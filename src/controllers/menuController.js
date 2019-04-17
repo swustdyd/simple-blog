@@ -1,11 +1,8 @@
 import { routeFurther, controller } from '../utils/decorator'
 import BaseController from './baseController'
 import ApiResponse from '../models/apiResponse'
-import {OP} from '../db'
 import {Authority} from '../middlewares/authority'
 import { SearchOptions } from '../type';
-
-const {like, eq} = OP;
 
 @controller()
 export default class MenuController extends BaseController{
@@ -69,7 +66,7 @@ export default class MenuController extends BaseController{
         description: '获取所有的菜单信息'
     })
     async getAllMenus(){
-        const {req, res, next, services} = this.ctx;
+        const { res, next, services} = this.ctx;
         try {
             const result = await services.menuService.searchMenus({
                 limit: Number.MAX_SAFE_INTEGER,

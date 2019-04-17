@@ -1,8 +1,6 @@
-import { routeFurther, controller} from '../utils/decorator'
+import { routeFurther} from '../utils/decorator'
 import BaseController from './baseController'
-import {SolrOptionsType, Article} from '../type'
 import ApiResponse from '../models/apiResponse'
-import logger from '../utils/logger'
 import {Authority} from '../middlewares/authority'
 
 // @controller()
@@ -16,7 +14,7 @@ export default class ArticelController extends BaseController{
     async searchArticel(){
         const {req, res, next, services} = this.ctx;
         try {
-            const {offset, pageSize, keyWord} = req.query;
+            const {offset, pageSize} = req.query;
             const apiRes = new ApiResponse()
             const result = await services.articleService.searchArticles({
                 limit: pageSize,

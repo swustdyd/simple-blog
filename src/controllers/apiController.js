@@ -2,8 +2,6 @@ import { routeFurther, controller } from '../utils/decorator'
 import BaseController from './baseController'
 import ApiResponse from '../models/apiResponse'
 import {Authority} from '../middlewares/authority'
-import {getAllRoutes} from '../utils/util'
-import logger from '../utils/logger';
 
 @controller()
 export default class ApiController extends BaseController{
@@ -15,7 +13,7 @@ export default class ApiController extends BaseController{
         description: '获取所有后台API接口'
     })
     async getAllApis(){
-        const {req, res, next, services} = this.ctx;
+        const { res, next, services} = this.ctx;
         try {
             const result = await services.apiService.searchApis({
                 offset: 0,
@@ -62,14 +60,14 @@ export default class ApiController extends BaseController{
     async searchApis(){
         const {req, res, next, services} = this.ctx;
         try {
-            const {offset, pageSize, name, roleId, path} = req.query;
+            const {offset = 0, pageSize, name, roleId, path} = req.query;
             const result = await services.apiService.searchApis({
                 where: {
                     name,
                     roleId,
                     path
                 },
-                offset: 0,
+                offset,
                 limit: pageSize
             })
             const apiRes = new ApiResponse();

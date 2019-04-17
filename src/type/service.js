@@ -27,6 +27,11 @@ export type ServiceType = {
 
 	},
 
+	tagService: {
+
+
+	},
+
 	userService: {
 
 
