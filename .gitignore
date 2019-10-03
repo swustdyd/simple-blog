@@ -65,3 +65,4 @@ typings/
 # src/type/service.js
 
 nohup.out
+package-lock.json
